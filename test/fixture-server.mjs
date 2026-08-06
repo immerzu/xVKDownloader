@@ -26,6 +26,9 @@ const VKD = globalThis.__VKD;
 
 const PORT = +(process.argv[2] || 8765);
 const USER_ID = 123456;
+
+/* Test-Fehlerinjektion: VKD_TEST_FAILKEY=N → die ersten N Key-Requests schlagen fehl. */
+let failKeyRemaining = parseInt(process.env.VKD_TEST_FAILKEY || '0', 10) || 0;
 const FIXTURE_MP3 = makeMp3(3);                    // ~3 s echtes MP3-ES (synthetisch)
 const AES_KEY = crypto.randomBytes(16);
 const SEG_COUNT = 3;
@@ -163,6 +166,14 @@ const server = http.createServer((req, res) => {
     return;
   }
   if (p === '/stream/key.pub') {
+    /* Test-Fehlerinjektion: VKD_TEST_FAILKEY=N → die ersten N Key-Requests
+       mit 500 beantworten (reproduziert transienten Key-Download-Fehler). */
+    if (failKeyRemaining > 0) {
+      failKeyRemaining--;
+      res.writeHead(500, { 'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*' });
+      res.end('key server error (test)');
+      return;
+    }
     res.writeHead(200, { 'Content-Type': MIME['.pub'], 'Access-Control-Allow-Origin': '*' });
     res.end(AES_KEY);
     return;
@@ -196,7 +207,8 @@ const server = http.createServer((req, res) => {
   res.writeHead(404, { 'Access-Control-Allow-Origin': '*' }); res.end('404');
 });
 
-server.listen(PORT, '127.0.0.1', () => {
+server.listen(PORT, () => {
   console.log('Fixture-Server: http://127.0.0.1:' + PORT);
   console.log('UserId für Obfuskierung: ' + USER_ID);
+  if (failKeyRemaining > 0) console.log('Test-Fehlerinjektion aktiv: VKD_TEST_FAILKEY=' + failKeyRemaining + ' (Key-Endpoint)');
 });

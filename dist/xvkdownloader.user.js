@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         xVKDownloader
 // @namespace    local.xvkdownloader
-// @version      1.0.9
+// @version      1.0.10
 // @description  Download button for each track on VK Audio pages (vk.com/vk.ru); loads the HLS stream and saves MP3 locally. Tampermonkey-compatible. / Download-Button pro Track auf VK Audio-Seiten (vk.com/vk.ru); lädt den HLS-Stream und speichert MP3 lokal. Tampermonkey-kompatibel. / Кнопка загрузки для каждого трека на страницах VK Audio (vk.com/vk.ru); загружает HLS-поток и сохраняет MP3 локально. Совместимо с Tampermonkey.
 // @author       Ede
 // @match        https://vk.com/*
@@ -1244,6 +1244,12 @@
       keyCache[keyUri] = net.getBytes(keyUri).then(function (b) {
         if (b.length !== 16) throw new Error('Key hat ' + b.length + ' Bytes (erwartet 16)');
         return b;
+      }).catch(function (err) {
+        /* Abgelehnte Promises nicht cachen: ein transienter Key-Fehler
+           darf den Download nicht dauerhaft blockieren (Segment-Retry
+           lädt den Key dann erneut). */
+        delete keyCache[keyUri];
+        throw err;
       });
       return keyCache[keyUri];
     }

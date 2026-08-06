@@ -355,6 +355,12 @@
       keyCache[keyUri] = net.getBytes(keyUri).then(function (b) {
         if (b.length !== 16) throw new Error('Key hat ' + b.length + ' Bytes (erwartet 16)');
         return b;
+      }).catch(function (err) {
+        /* Abgelehnte Promises nicht cachen: ein transienter Key-Fehler
+           darf den Download nicht dauerhaft blockieren (Segment-Retry
+           lädt den Key dann erneut). */
+        delete keyCache[keyUri];
+        throw err;
       });
       return keyCache[keyUri];
     }
