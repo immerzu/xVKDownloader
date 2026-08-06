@@ -1,58 +1,99 @@
 # xVKDownloader
 
-Tampermonkey-Userscript, das auf VK-Audio-Seiten (vk.com / vk.ru) einen
-**Download-Button pro Track** einfügt, den HLS-Stream vollständig herunterlädt,
-entschlüsselt und als **echte MP3-Datei** (`Künstler - Titel.mp3`) lokal speichert.
+## English 🇬🇧
 
-Kompatibel mit **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Läuft auf allen
-VK-Audio-Oberflächen: Suche, eigene Audios, Playlists, Empfehlungen.
+Tampermonkey userscript that adds a **download button per track** on VK Audio pages (vk.com / vk.ru). It downloads the complete HLS stream, decrypts it, demuxes it and saves a **real MP3 file** (`Artist - Title.mp3`) locally.
+
+Compatible with **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Works on all VK Audio surfaces: search, your own audios, playlists and recommendations.
+
+**Features:**
+- Download button (⬇) per track in `[data-testid="MusicTrackRow"]` rows
+- Full pipeline: m3u8 playlist → segments (AES-128 decryption) → concatenation → TS demux → **real MP3** (no container renaming)
+- Correct filenames: `Artist - Title.mp3` (special characters cleaned)
+- Progress in the tooltip (`Segment 3/11`, `saving…`, `saved`)
+- Works on search, own audios, playlists, recommendations (SPA-safe)
+- Optional **token mode** (api.vk.com fallback) via the settings
+- No data to third parties: login/token stay local in the browser (GM storage)
+
+**Installation:**
+1. Install **Tampermonkey** (if not already): https://www.tampermonkey.net/index.php?ext=dhdg&version=5.5.0
+2. Tampermonkey menu → **Dashboard** → **`+` (New script)**
+3. Open the script editor and paste the **entire content of `dist/xvkdownloader.user.js`**, then save (**File → Save**, Ctrl+S).
+   - Alternative: open the `.user.js` file directly in the browser — Tampermonkey offers to install it.
+4. The userscript appears in the list and is **active**.
+
+**Usage:**
+1. **Log in to VK** (session cookie required — the userscript uses your normal logged-in state, **no** separate token needed).
+2. Open an audio page, e.g. `https://vk.ru/audio?performer=1&q=Chris%20Lake%2C%20ATRIP`.
+3. Each track row shows a **⬇-button** on the right.
+4. **Click ⬇** to download the track: the tooltip shows progress, the MP3 is saved to your default download folder (`Artist - Title.mp3`).
+5. Download multiple tracks one after another — each click starts its own download.
 
 ---
 
-## Funktionen
+## Deutsch 🇩🇪
 
+Tampermonkey-Userscript, das auf VK-Audio-Seiten (vk.com / vk.ru) einen **Download-Button pro Track** einfügt, den HLS-Stream vollständig herunterlädt, entschlüsselt und als **echte MP3-Datei** (`Künstler - Titel.mp3`) lokal speichert.
+
+Kompatibel mit **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Läuft auf allen VK-Audio-Oberflächen: Suche, eigene Audios, Playlists, Empfehlungen.
+
+**Funktionen:**
 - **Download-Button** (⬇) pro Track in `[data-testid="MusicTrackRow"]`-Zeilen
-- Vollständige Pipeline: m3u8-Playlist → Segmente (AES-128-Entschlüsselung) →
-  Konkatenation → TS-Demux → **echtes MP3** (kein Container-Umbenennen)
+- Vollständige Pipeline: m3u8-Playlist → Segmente (AES-128-Entschlüsselung) → Konkatenation → TS-Demux → **echtes MP3** (kein Container-Umbenennen)
 - Korrekter Dateiname: `Künstler - Titel.mp3` (Sonderzeichen bereinigt)
 - Fortschrittsanzeige im Tooltip (`Segment 3/11`, `speichere…`, `gespeichert`)
 - Funktioniert auf Suche, eigenen Audios, Playlists, Empfehlungen (SPA-navigationssicher)
 - Optionaler **Token-Modus** (api.vk.com-Fallback) über die Einstellungen
 - Keine Daten an Dritte: Login/Token bleiben lokal im Browser (GM-Storage)
 
----
-
-## Installation
-
-1. **Tampermonkey** installieren (falls noch nicht vorhanden):
-   - Chrome: https://www.tampermonkey.net/index.php?ext=dhdg&version=5.5.0
+**Installation:**
+1. **Tampermonkey** installieren (falls noch nicht vorhanden): https://www.tampermonkey.net/index.php?ext=dhdg&version=5.5.0
 2. Tampermonkey-Menü → **Dashboard** → **`+` (Neues Skript)**
-3. Skript-Editor öffnen, **gesamten Inhalt von `dist/xvkdownloader.user.js`**
-   einfügen, mit **Datei → Speichern** (Strg+S) sichern.
-   - Alternativ: Skript-Datei per Drag & Drop auf die `chrome://extensions`-Seite
-     oder die `.user.js`-Datei direkt öffnen → Tampermonkey bietet Installation an.
+3. Skript-Editor öffnen, **gesamten Inhalt von `dist/xvkdownloader.user.js`** einfügen, mit **Datei → Speichern** (Strg+S) sichern.
+   - Alternativ: Die `.user.js`-Datei direkt im Browser öffnen — Tampermonkey bietet die Installation an.
 4. Das Userscript erscheint in der Liste und ist **aktiv**.
 
-> Hinweis: Das Skript ist ein **unverändertes Build-Artefakt** aus `src/`.
-> Nach Änderungen an `src/` neu bauen: `node scripts/build.mjs`.
-
----
-
-## Nutzung
-
-1. **Bei VK angemeldet sein** (Session-Cookie erforderlich — das Userscript nutzt
-   den normalen eingeloggten Zustand, **kein** separates Token nötig).
-2. Audio-Seite öffnen, z. B.:
-   `https://vk.ru/audio?performer=1&q=Chris%20Lake%2C%20ATRIP`
+**Nutzung:**
+1. **Bei VK angemeldet sein** (Session-Cookie erforderlich — das Userscript nutzt den normalen eingeloggten Zustand, **kein** separates Token nötig).
+2. Audio-Seite öffnen, z. B. `https://vk.ru/audio?performer=1&q=Chris%20Lake%2C%20ATRIP`.
 3. Bei jeder Track-Zeile erscheint rechts ein **⬇-Button**.
-4. **Klick auf ⬇** lädt den Track:
-   - Tooltip zeigt den Fortschritt.
-   - Die MP3-Datei wird in den Standard-Download-Ordner gespeichert
-     (`Künstler - Titel.mp3`).
-5. Mehrere Tracks nacheinander herunterladen — jeder Klick startet einen eigenen
-   Download.
+4. **Klick auf ⬇** lädt den Track: Der Tooltip zeigt den Fortschritt, die MP3-Datei wird in den Standard-Download-Ordner gespeichert (`Künstler - Titel.mp3`).
+5. Mehrere Tracks nacheinander herunterladen — jeder Klick startet einen eigenen Download.
 
 ---
+
+## Русский 🇷🇺
+
+Tampermonkey-юзерскрипт, который добавляет **кнопку загрузки для каждого трека** на страницах VK Audio (vk.com / vk.ru). Он полностью загружает HLS-поток, расшифровывает его и сохраняет **настоящий файл MP3** (`Исполнитель - Название.mp3`) локально.
+
+Совместим с **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Работает на всех разделах VK Audio: поиск, свои аудиозаписи, плейлисты, рекомендации.
+
+**Возможности:**
+- **Кнопка загрузки** (⬇) для каждого трека в строках `[data-testid="MusicTrackRow"]`
+- Полный конвейер: плейлист m3u8 → сегменты (расшифровка AES-128) → конкатенация → TS-демультиплексирование → **настоящий MP3** (без переименования контейнера)
+- Правильные имена файлов: `Исполнитель - Название.mp3` (спецсимволы очищаются)
+- Индикатор прогресса в подсказке (`Segment 3/11`, `сохранение…`, `сохранено`)
+- Работает в поиске, своих аудиозаписях, плейлистах, рекомендациях (устойчиво к SPA-навигации)
+- Необязательный **режим токена** (фолбэк api.vk.com) через настройки
+- Данные не передаются третьим лицам: логин/токен остаются локально в браузере (GM-хранилище)
+
+**Установка:**
+1. Установите **Tampermonkey** (если ещё нет): https://www.tampermonkey.net/index.php?ext=dhdg&version=5.5.0
+2. Меню Tampermonkey → **Dashboard** → **`+` (Новый скрипт)**
+3. Откройте редактор скриптов и вставьте **всё содержимое `dist/xvkdownloader.user.js`**, сохраните (**Файл → Сохранить**, Ctrl+S).
+   - Альтернатива: откройте файл `.user.js` прямо в браузере — Tampermonkey предложит установку.
+4. Юзерскрипт появится в списке и будет **активен**.
+
+**Использование:**
+1. **Войдите в VK** (требуется сессионный cookie — юзерскрипт использует обычный авторизованный режим, **отдельный токен не нужен**).
+2. Откройте страницу аудио, например `https://vk.ru/audio?performer=1&q=Chris%20Lake%2C%20ATRIP`.
+3. В каждой строке трека справа появится **кнопка ⬇**.
+4. **Нажмите ⬇**, чтобы скачать трек: подсказка показывает прогресс, файл MP3 сохраняется в стандартную папку загрузок (`Исполнитель - Название.mp3`).
+5. Скачивайте несколько треков подряд — каждый клик запускает отдельную загрузку.
+
+---
+
+# Developer documentation (technische Details)
 
 ## Konfiguration (optional)
 
@@ -67,8 +108,6 @@ Tampermonkey-Menü → **xVKDownloader: Einstellungen** öffnet ein Dialogfenste
 | **ffmpeg-core-URL** | Alternative Quelle für ffmpeg.wasm (Default: jsDelivr). |
 
 Alle Werte werden **nur lokal** im Browser gespeichert (GM-Speicher).
-
----
 
 ## Token-Beschaffung (nur für den Fallback-Modus)
 
@@ -92,8 +131,6 @@ python3 scripts/get_token.py --login +491234567890 --out token.json
 > und gibt `{token, user_agent}` aus. Das Token ist für die Nutzung der
 > api.vk.com-Methoden (`audio.getById`) gedacht und sollte wie ein Passwort
 > behandelt werden.
-
----
 
 ## Technischer Hintergrund (Netzwerkanalyse, August 2026)
 
@@ -119,12 +156,10 @@ Der aktuelle VK-Audio-Fluss (live im Browser beobachtet):
 Beobachtete API-Methoden (weitere): `web.api.vk.ru/method/catalog.getAudioSearch`
 (v=5.282, client_id=6287487) — verlangt Login (error 28 ohne Session).
 
----
-
 ## Projektstruktur
 
 ```
-VK_Downloader/
+xVKDownloader/
 ├── dist/
 │   └── xvkdownloader.user.js      ← INSTALLIERBARES Userscript (gebaut)
 ├── src/
@@ -153,8 +188,6 @@ VK_Downloader/
     └── netlog-timeline.mjs        ← NetLog-Timeline: Stream-Events mit Zeiten
 ```
 
----
-
 ## Tests
 
 ```bash
@@ -170,8 +203,6 @@ VK-nachgebildete Seite (GM-APIs gestubbt) und prüft: Button-Injektion,
 al_audio.php-Resolution, AES-Entschlüsselung, MP3-Assembly (byte-identisch
 mit dem Quell-MP3) und Dateinamen.
 
----
-
 ## Bekannte Einschränkungen & Risiken
 
 - **VK kann den Schutz jederzeit ändern** (Obfuskation, Verschlüsselung, DOM).
@@ -185,8 +216,6 @@ mit dem Quell-MP3) und Dateinamen.
   rechtlich gestattet ist (z. B. eigene Uploads). Private Nutzung.
 - Keine Garantie, dass VK den Zugriff nicht unterbindet; Token können
   an Gültigkeit verlieren.
-
----
 
 ## Lizenz
 
