@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""VK Downloader — Token-Beschaffung per vkaudiotoken-python.
+"""xVKDownloader — Token-Beschaffung per vkaudiotoken-python.
 
 Beschafft einen "VK Audio Token" (Client-Emulation) für den optionalen
 Token-Modus des Userscripts (Fallback, wenn der Session-Pfad nicht greift).

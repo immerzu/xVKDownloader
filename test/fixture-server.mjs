@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — Fixture-HTTP-Server (Tests)
+ * xVKDownloader — Fixture-HTTP-Server (Tests)
  * Simuliert eine VK-ähnliche Umgebung für den Browser-End-to-End-Test:
  *   GET  /                       → fixture.html (VK-ähnliches DOM)
  *   POST /al_audio.php           → Track-Payload mit obfuskierter Stream-URL
@@ -82,7 +82,7 @@ function fixtureHtml() {
 </script>
 </head>
 <body>
-<h1>VK Downloader Fixture</h1>
+<h1>xVKDownloader Fixture</h1>
 <div class="row-wrap">
   <div data-testid="MusicTrackRow">
     <div class="row-inner">

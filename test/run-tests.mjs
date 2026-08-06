@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — Unit-Tests (Node)
+ * xVKDownloader — Unit-Tests (Node)
  * Testet die echten src/-Module (gleiche Dateien, die in das Userscript
  * gebaut werden). Fixtures: strukturell gültige MP3/TS/ADTS/fMP4-Bytes.
  * Aufruf: node test/run-tests.mjs

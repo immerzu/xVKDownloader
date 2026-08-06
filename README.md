@@ -1,4 +1,4 @@
-# VK Downloader
+# xVKDownloader
 
 Tampermonkey-Userscript, das auf VK-Audio-Seiten (vk.com / vk.ru) einen
 **Download-Button pro Track** einfügt, den HLS-Stream vollständig herunterlädt,
@@ -27,7 +27,7 @@ VK-Audio-Oberflächen: Suche, eigene Audios, Playlists, Empfehlungen.
 1. **Tampermonkey** installieren (falls noch nicht vorhanden):
    - Chrome: https://www.tampermonkey.net/index.php?ext=dhdg&version=5.5.0
 2. Tampermonkey-Menü → **Dashboard** → **`+` (Neues Skript)**
-3. Skript-Editor öffnen, **gesamten Inhalt von `dist/vk-downloader.user.js`**
+3. Skript-Editor öffnen, **gesamten Inhalt von `dist/xvkdownloader.user.js`**
    einfügen, mit **Datei → Speichern** (Strg+S) sichern.
    - Alternativ: Skript-Datei per Drag & Drop auf die `chrome://extensions`-Seite
      oder die `.user.js`-Datei direkt öffnen → Tampermonkey bietet Installation an.
@@ -56,7 +56,7 @@ VK-Audio-Oberflächen: Suche, eigene Audios, Playlists, Empfehlungen.
 
 ## Konfiguration (optional)
 
-Tampermonkey-Menü → **VK Downloader: Einstellungen** öffnet ein Dialogfenster:
+Tampermonkey-Menü → **xVKDownloader: Einstellungen** öffnet ein Dialogfenster:
 
 | Feld | Bedeutung |
 |---|---|
@@ -126,7 +126,7 @@ Beobachtete API-Methoden (weitere): `web.api.vk.ru/method/catalog.getAudioSearch
 ```
 VK_Downloader/
 ├── dist/
-│   └── vk-downloader.user.js      ← INSTALLIERBARES Userscript (gebaut)
+│   └── xvkdownloader.user.js      ← INSTALLIERBARES Userscript (gebaut)
 ├── src/
 │   ├── main.js                    ← UI, Resolution, Download-Pipeline
 │   └── shared/
@@ -138,7 +138,7 @@ VK_Downloader/
 │       ├── gm-net.js              ← GM_xmlhttpRequest-Wrapper (+ fetch-Fallback)
 │       └── settings.js            ← GM-Speicher-Einstellungen
 ├── scripts/
-│   ├── build.mjs                  ← baut dist/vk-downloader.user.js
+│   ├── build.mjs                  ← baut dist/xvkdownloader.user.js
 │   ├── get_token.py               ← vkaudiotoken-python-Wrapper (Token-Fallback)
 │   └── fetch-ffmpeg-wasm.mjs      ← lädt ffmpeg.wasm (optional, AAC→MP3)
 └── test/

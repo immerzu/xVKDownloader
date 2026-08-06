@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — aes.js
+ * xVKDownloader — aes.js
  * AES-128-CBC-Entschlüsselung für HLS EXT-X-KEY (WebCrypto / Node-crypto).
  * IV = 16-Byte-Big-Endian der Segment-Sequenznummer (HLS-Standard,
  * falls kein EXT-X-KEY IV-Attribut gesetzt ist).

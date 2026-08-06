@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — CDP-Live-Analyse am echten Yandex-Browser (Port 9222)
+ * xVKDownloader — CDP-Live-Analyse am echten Yandex-Browser (Port 9222)
  * Verbindet sich per CDP-WebSocket, klickt den .vkd-btn und loggt
  * Netzwerk-Requests, Konsolen-Ausgaben und Fehler für ~25 s.
  * Aufruf: node test/cdp-analyze.mjs

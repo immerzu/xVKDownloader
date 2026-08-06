@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — Test-Fixtures (Node)
+ * xVKDownloader — Test-Fixtures (Node)
  * Erzeugt synthetische, strukturell gültige MP3-Frames, MPEG-TS-Container
  * (PAT/PMT/PES) und AES-128-CBC-verschlüsselte HLS-Segmente.
  * Kein echtes Audio — nur Byte-Struktur (Frame-Syncs, Container), ausreichend

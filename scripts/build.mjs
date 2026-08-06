@@ -1,6 +1,6 @@
 /* ============================================================================
- * VK Downloader — build.mjs
- * Baut dist/vk-downloader.user.js aus src/-Modulen (mit Userscript-Header).
+ * xVKDownloader — build.mjs
+ * Baut dist/xvkdownloader.user.js aus src/-Modulen (mit Userscript-Header).
  * Aufruf: node scripts/build.mjs
  * ========================================================================== */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -10,10 +10,10 @@ import path from 'node:path';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const HEADER = `// ==UserScript==
-// @name         VK Downloader
-// @namespace    local.vk-downloader
-// @version      1.0.8
-// @description  Download-Button pro Track auf VK Audio-Seiten (vk.com/vk.ru); lädt den HLS-Stream und speichert MP3 lokal. Tampermonkey-kompatibel.
+// @name         xVKDownloader
+// @namespace    local.xvkdownloader
+// @version      1.0.9
+// @description  Download button for each track on VK Audio pages (vk.com/vk.ru); loads the HLS stream and saves MP3 locally. Tampermonkey-compatible. / Download-Button pro Track auf VK Audio-Seiten (vk.com/vk.ru); lädt den HLS-Stream und speichert MP3 lokal. Tampermonkey-kompatibel. / Кнопка загрузки для каждого трека на страницах VK Audio (vk.com/vk.ru); загружает HLS-поток и сохраняет MP3 локально. Совместимо с Tampermonkey.
 // @author       Ede
 // @match        https://vk.com/*
 // @match        https://www.vk.com/*
@@ -42,7 +42,7 @@ const HEADER = `// ==UserScript==
 // @license      MIT (nur private Nutzung)
 // ==/UserScript==
 
-/* VK Downloader — gebaut aus src/. Quellen: src/main.js + src/shared/* */
+/* xVKDownloader — gebaut aus src/. Quellen: src/main.js + src/shared/* */
 (function (globalThis) {
 'use strict';
 `;
@@ -69,7 +69,7 @@ for (const f of FILES) {
 out += FOOTER;
 
 mkdirSync(path.join(root, 'dist'), { recursive: true });
-writeFileSync(path.join(root, 'dist/vk-downloader.user.js'), out);
+writeFileSync(path.join(root, 'dist/xvkdownloader.user.js'), out);
 
 /* Header-Validierung */
 const head = out.slice(0, 2000);
@@ -80,4 +80,4 @@ for (const g of ['GM_xmlhttpRequest', 'GM_download', 'GM_setValue', 'GM_getValue
 }
 if (issues.length) { console.error('BUILD-FEHLER:', issues.join(', ')); process.exit(1); }
 
-console.log('dist/vk-downloader.user.js geschrieben: ' + (out.length / 1024).toFixed(1) + ' KB');
+console.log('dist/xvkdownloader.user.js geschrieben: ' + (out.length / 1024).toFixed(1) + ' KB');

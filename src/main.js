@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — main.js
+ * xVKDownloader — main.js
  * Userscript-Hauptlogik:
  *  1. Download-Button pro Track in [data-testid^="MusicTrack…"]-Zeilen
  *  2. Track-Daten aus React-Fiber (apiAudio) bzw. /audio-Links
@@ -50,7 +50,7 @@
 
   /* ---------- Einstellungen (Tampermonkey-Menü) ---------- */
   if (NS.gm && NS.gm.registerMenuCommand) {
-    try { NS.gm.registerMenuCommand('⚙ VK Downloader: Einstellungen', openSettingsModal); } catch (e) {}
+    try { NS.gm.registerMenuCommand('⚙ xVKDownloader: Einstellungen', openSettingsModal); } catch (e) {}
   }
 
   function openSettingsModal() {
@@ -58,7 +58,7 @@
     var overlay = doc.createElement('div');
     overlay.className = 'vkd-modal';
     overlay.innerHTML = '<div class="vkd-modal-box">' +
-      '<h3>VK Downloader — Einstellungen</h3>' +
+      '<h3>xVKDownloader — Einstellungen</h3>' +
       '<label>Token (optional, für api.vk.com-Fallback)<br>' +
       '<input data-k="token" type="text" spellcheck="false" placeholder="aus scripts/get_token.py"></label>' +
       '<label>User-Agent (zum Token gehörig, optional)<br>' +
@@ -155,7 +155,7 @@
     var btn = doc.createElement('button');
     btn.type = 'button';
     btn.className = 'vkd-btn';
-    btn.title = 'Download (VK Downloader)';
+    btn.title = 'Download (xVKDownloader)';
     btn.innerHTML = '<svg class="vkd-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>' +
       '<span class="vkd-tip">bereit</span>';
     var tip = btn.querySelector('.vkd-tip');
@@ -300,7 +300,7 @@
     var baseName = assemble.sanitizeName(info.artist + ' - ' + info.title + (info.subtitle ? ' (' + info.subtitle + ')' : ''), 'vk-track');
     return resolveUrl(info).then(function (res) {
       if (!res || !res.url) { fail(tip, 'URL nicht auflösbar'); throw new Error('resolve failed'); }
-      console.log('[VK Downloader] Stream (' + res.source + '):', res.url);
+      console.log('[xVKDownloader] Stream (' + res.source + '):', res.url);
       return fetchAndAssemble(res.url, tip).then(function (result) {
         var ext = result.ext || '.mp3';
         var filename = assemble.withExt(baseName, ext);
@@ -317,7 +317,7 @@
     tip.textContent = String(msg).length > 48 ? String(msg).slice(0, 45) + '…' : String(msg);
     var btn = tip.closest ? tip.closest('.vkd-btn') : null;
     if (btn) btn.classList.add('vkd-err');
-    console.warn('[VK Downloader]', msg);
+    console.warn('[xVKDownloader]', msg);
   }
 
   function fetchAndAssemble(m3u8Url, tip) {

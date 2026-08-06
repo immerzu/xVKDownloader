@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — gm-net.js
+ * xVKDownloader — gm-net.js
  * Einheitlicher Netzwerk-Wrapper: GM_xmlhttpRequest (Tampermonkey) mit
  * fetch-Fallback (für Tests/Entwicklung ohne TM). Außerdem Normalisierung
  * der GM-API-Objekte (GM-Objekt vs. GM_*-Globals).

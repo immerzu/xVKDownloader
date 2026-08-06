@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — m3u8.js
+ * xVKDownloader — m3u8.js
  * HLS-Playlist-Parser (Master + Media), Varianten-Auswahl, URL-Auflösung
  * relativer Segment-URIs und per-Segment-Key-Status (AES-128 EXT-X-KEY).
  * ========================================================================== */

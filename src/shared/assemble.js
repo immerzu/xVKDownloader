@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — assemble.js
+ * xVKDownloader — assemble.js
  * Codec-/Container-Erkennung und Zusammenführung von HLS-Segmenten:
  *   - raw MP3-ES            → Konkatenation = echtes MP3
  *   - MPEG-TS (MP3 oder AAC) → TS-Demux → Elementary Stream

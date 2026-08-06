@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — settings.js
+ * xVKDownloader — settings.js
  * Einstellungen via GM_setValue/GM_getValue (nur lokal im Browser).
  * ========================================================================== */
 (function (g) {

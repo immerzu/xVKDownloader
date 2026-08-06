@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — ts-demux.js
+ * xVKDownloader — ts-demux.js
  * Minimaler MPEG-TS-Demuxer: PAT → PMT → Audio-PID → PES-Payloads
  * → Elementary Stream (MP3-ES oder AAC-ADTS-ES).
  *

@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — NetLog-Analyse (chrome-net-export-log.json)
+ * xVKDownloader — NetLog-Analyse (chrome-net-export-log.json)
  * Extrahiert aus dem Chrome-NetLog alle Audio-relevanten Requests
  * (vk.com/vk.ru/al_audio/vkuseraudio/userapi/m3u8/ts/key) mit
  * Status-Codes, Initiatoren und net_error-Fehlercodes, zeitlich sortiert.

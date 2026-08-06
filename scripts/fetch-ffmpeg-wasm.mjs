@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — fetch-ffmpeg-wasm.mjs
+ * xVKDownloader — fetch-ffmpeg-wasm.mjs
  * Lädt ffmpeg.wasm 0.11.6 (UMD) in dist/vendor/ffmpeg/ für die EXPERIMENTELLE
  * AAC→MP3-Transkodierung. Ohne diese Dateien wird bei AAC-Streams der native
  * Container (.aac/.m4a) gespeichert.

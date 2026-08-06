@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — vk-decoder.js
+ * xVKDownloader — vk-decoder.js
  * Dekodiert VK-obfuskierte Audio-URLs vom Typ
  *   https://vk.com/audio_api_unavailable?extra=<b64>#<b64>
  * Kanonischer v/r/s/i/x-Algorithmus (öffentlich dokumentierter VK-Decoder,

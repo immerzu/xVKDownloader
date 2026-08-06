@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         VK Downloader
-// @namespace    local.vk-downloader
-// @version      1.0.8
-// @description  Download-Button pro Track auf VK Audio-Seiten (vk.com/vk.ru); lädt den HLS-Stream und speichert MP3 lokal. Tampermonkey-kompatibel.
+// @name         xVKDownloader
+// @namespace    local.xvkdownloader
+// @version      1.0.9
+// @description  Download button for each track on VK Audio pages (vk.com/vk.ru); loads the HLS stream and saves MP3 locally. Tampermonkey-compatible. / Download-Button pro Track auf VK Audio-Seiten (vk.com/vk.ru); lädt den HLS-Stream und speichert MP3 lokal. Tampermonkey-kompatibel. / Кнопка загрузки для каждого трека на страницах VK Audio (vk.com/vk.ru); загружает HLS-поток и сохраняет MP3 локально. Совместимо с Tampermonkey.
 // @author       Ede
 // @match        https://vk.com/*
 // @match        https://www.vk.com/*
@@ -31,13 +31,13 @@
 // @license      MIT (nur private Nutzung)
 // ==/UserScript==
 
-/* VK Downloader — gebaut aus src/. Quellen: src/main.js + src/shared/* */
+/* xVKDownloader — gebaut aus src/. Quellen: src/main.js + src/shared/* */
 (function (globalThis) {
 'use strict';
 
 /* ===== src/shared/vk-decoder.js ===== */
 /* ============================================================================
- * VK Downloader — vk-decoder.js
+ * xVKDownloader — vk-decoder.js
  * Dekodiert VK-obfuskierte Audio-URLs vom Typ
  *   https://vk.com/audio_api_unavailable?extra=<b64>#<b64>
  * Kanonischer v/r/s/i/x-Algorithmus (öffentlich dokumentierter VK-Decoder,
@@ -211,7 +211,7 @@
 
 /* ===== src/shared/m3u8.js ===== */
 /* ============================================================================
- * VK Downloader — m3u8.js
+ * xVKDownloader — m3u8.js
  * HLS-Playlist-Parser (Master + Media), Varianten-Auswahl, URL-Auflösung
  * relativer Segment-URIs und per-Segment-Key-Status (AES-128 EXT-X-KEY).
  * ========================================================================== */
@@ -315,7 +315,7 @@
 
 /* ===== src/shared/ts-demux.js ===== */
 /* ============================================================================
- * VK Downloader — ts-demux.js
+ * xVKDownloader — ts-demux.js
  * Minimaler MPEG-TS-Demuxer: PAT → PMT → Audio-PID → PES-Payloads
  * → Elementary Stream (MP3-ES oder AAC-ADTS-ES).
  *
@@ -485,7 +485,7 @@
 
 /* ===== src/shared/assemble.js ===== */
 /* ============================================================================
- * VK Downloader — assemble.js
+ * xVKDownloader — assemble.js
  * Codec-/Container-Erkennung und Zusammenführung von HLS-Segmenten:
  *   - raw MP3-ES            → Konkatenation = echtes MP3
  *   - MPEG-TS (MP3 oder AAC) → TS-Demux → Elementary Stream
@@ -660,7 +660,7 @@
 
 /* ===== src/shared/aes.js ===== */
 /* ============================================================================
- * VK Downloader — aes.js
+ * xVKDownloader — aes.js
  * AES-128-CBC-Entschlüsselung für HLS EXT-X-KEY (WebCrypto / Node-crypto).
  * IV = 16-Byte-Big-Endian der Segment-Sequenznummer (HLS-Standard,
  * falls kein EXT-X-KEY IV-Attribut gesetzt ist).
@@ -710,7 +710,7 @@
 
 /* ===== src/shared/gm-net.js ===== */
 /* ============================================================================
- * VK Downloader — gm-net.js
+ * xVKDownloader — gm-net.js
  * Einheitlicher Netzwerk-Wrapper: GM_xmlhttpRequest (Tampermonkey) mit
  * fetch-Fallback (für Tests/Entwicklung ohne TM). Außerdem Normalisierung
  * der GM-API-Objekte (GM-Objekt vs. GM_*-Globals).
@@ -845,7 +845,7 @@
 
 /* ===== src/shared/settings.js ===== */
 /* ============================================================================
- * VK Downloader — settings.js
+ * xVKDownloader — settings.js
  * Einstellungen via GM_setValue/GM_getValue (nur lokal im Browser).
  * ========================================================================== */
 (function (g) {
@@ -888,7 +888,7 @@
 
 /* ===== src/main.js ===== */
 /* ============================================================================
- * VK Downloader — main.js
+ * xVKDownloader — main.js
  * Userscript-Hauptlogik:
  *  1. Download-Button pro Track in [data-testid^="MusicTrack…"]-Zeilen
  *  2. Track-Daten aus React-Fiber (apiAudio) bzw. /audio-Links
@@ -939,7 +939,7 @@
 
   /* ---------- Einstellungen (Tampermonkey-Menü) ---------- */
   if (NS.gm && NS.gm.registerMenuCommand) {
-    try { NS.gm.registerMenuCommand('⚙ VK Downloader: Einstellungen', openSettingsModal); } catch (e) {}
+    try { NS.gm.registerMenuCommand('⚙ xVKDownloader: Einstellungen', openSettingsModal); } catch (e) {}
   }
 
   function openSettingsModal() {
@@ -947,7 +947,7 @@
     var overlay = doc.createElement('div');
     overlay.className = 'vkd-modal';
     overlay.innerHTML = '<div class="vkd-modal-box">' +
-      '<h3>VK Downloader — Einstellungen</h3>' +
+      '<h3>xVKDownloader — Einstellungen</h3>' +
       '<label>Token (optional, für api.vk.com-Fallback)<br>' +
       '<input data-k="token" type="text" spellcheck="false" placeholder="aus scripts/get_token.py"></label>' +
       '<label>User-Agent (zum Token gehörig, optional)<br>' +
@@ -1044,7 +1044,7 @@
     var btn = doc.createElement('button');
     btn.type = 'button';
     btn.className = 'vkd-btn';
-    btn.title = 'Download (VK Downloader)';
+    btn.title = 'Download (xVKDownloader)';
     btn.innerHTML = '<svg class="vkd-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>' +
       '<span class="vkd-tip">bereit</span>';
     var tip = btn.querySelector('.vkd-tip');
@@ -1189,7 +1189,7 @@
     var baseName = assemble.sanitizeName(info.artist + ' - ' + info.title + (info.subtitle ? ' (' + info.subtitle + ')' : ''), 'vk-track');
     return resolveUrl(info).then(function (res) {
       if (!res || !res.url) { fail(tip, 'URL nicht auflösbar'); throw new Error('resolve failed'); }
-      console.log('[VK Downloader] Stream (' + res.source + '):', res.url);
+      console.log('[xVKDownloader] Stream (' + res.source + '):', res.url);
       return fetchAndAssemble(res.url, tip).then(function (result) {
         var ext = result.ext || '.mp3';
         var filename = assemble.withExt(baseName, ext);
@@ -1206,7 +1206,7 @@
     tip.textContent = String(msg).length > 48 ? String(msg).slice(0, 45) + '…' : String(msg);
     var btn = tip.closest ? tip.closest('.vkd-btn') : null;
     if (btn) btn.classList.add('vkd-err');
-    console.warn('[VK Downloader]', msg);
+    console.warn('[xVKDownloader]', msg);
   }
 
   function fetchAndAssemble(m3u8Url, tip) {

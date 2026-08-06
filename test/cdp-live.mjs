@@ -1,5 +1,5 @@
 /* ============================================================================
- * VK Downloader — CDP-Live-Analyse am echten Yandex-Browser (Port 9222)
+ * xVKDownloader — CDP-Live-Analyse am echten Yandex-Browser (Port 9222)
  * 1) VK-Audio-Tab öffnen (falls keiner da), warten bis der .vkd-btn erscheint
  * 2) Klick → Netzwerk/Konsole/Fehler für 40 s mitschneiden
  * 3) Download-Ordner danach nach frischen MP3 prüfen
@@ -104,8 +104,8 @@ for (const e of events) {
 
 console.log('\n=== NETZWERK (Audio-relevant) ===');
 reqs.forEach((r) => console.log(' ' + r.kind + (r.status ? ' ' + r.status : '') + '  ' + r.url));
-console.log('\n=== KONSOLE (VK Downloader) ===');
-cons.filter((c) => /VK Downloader|vkd|manifest|Segment|gespeichert|Netzwerkfehler|Timeout/i.test(c.text)).forEach((c) => console.log(' [' + c.type + '] ' + c.text));
+console.log('\n=== KONSOLE (xVKDownloader) ===');
+cons.filter((c) => /xVKDownloader|vkd|manifest|Segment|gespeichert|Netzwerkfehler|Timeout/i.test(c.text)).forEach((c) => console.log(' [' + c.type + '] ' + c.text));
 console.log('\n=== FEHLER ===');
 errs.length ? errs.forEach((e) => console.log(' ' + JSON.stringify(e).slice(0, 200))) : console.log(' (keine)');
 
