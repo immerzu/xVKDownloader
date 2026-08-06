@@ -1,0 +1,16 @@
+# Node/Test-Artefakte
+node_modules/
+dist/vendor/
+test/.playwright-mcp/
+
+# Browser-Logs (Playwright MCP)
+.playwright-mcp/
+
+# Agenten-Metadaten
+.reasonix/
+
+# Lokale Notizen
+*.log
+
+# Release-Artefakte (nur lokal; Version im Dateinamen)
+Ausgabe/
