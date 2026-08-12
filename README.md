@@ -104,10 +104,12 @@ Tampermonkey-Menü → **xVKDownloader: Einstellungen** öffnet ein Dialogfenste
 | **Token** | Optionaler VK-Audio-Token für den api.vk.com-Fallback (siehe unten). Leer = Session-Modus. |
 | **User-Agent** | Zum Token gehörender User-Agent (vkaudiotoken-python liefert beide). |
 | **Bitrate** | MP3-Bitrate bei Transkodierung (128/192/256/320, Default 320). |
-| **AAC→MP3 transkodieren** | Experimentell; benötigt `dist/vendor/ffmpeg/` (siehe unten). |
+| **AAC→MP3 transkodieren** | Experimentell; benötigt `dist/vendor/ffmpeg/` (erzeugen: `node scripts/fetch-ffmpeg-wasm.mjs`). |
 | **ffmpeg-core-URL** | Alternative Quelle für ffmpeg.wasm (Default: jsDelivr). |
 
 Alle Werte werden **nur lokal** im Browser gespeichert (GM-Speicher).
+Die Segment-Parallelität ist fest auf **3** gesetzt (`settings.js`, `concurrency`) und
+nicht über das Dialogfenster änderbar.
 
 ## Token-Beschaffung (nur für den Fallback-Modus)
 
@@ -161,42 +163,76 @@ Beobachtete API-Methoden (weitere): `web.api.vk.ru/method/catalog.getAudioSearch
 ```
 xVKDownloader/
 ├── dist/
-│   └── xvkdownloader.user.js      ← INSTALLIERBARES Userscript (gebaut)
+│   ├── xvkdownloader.user.js      ← INSTALLIERBARES Userscript (gebaut; aktuell v1.0.12)
+│   └── vendor/ffmpeg/             ← ffmpeg.wasm (optional; gitignored, per fetch-ffmpeg-wasm.mjs)
 ├── src/
 │   ├── main.js                    ← UI, Resolution, Download-Pipeline
 │   └── shared/
 │       ├── vk-decoder.js          ← audio_api_unavailable-Decoder (v/r/s/i/x)
-│       ├── m3u8.js                ← HLS-Parser (Master/Media, Key-Status)
+│       ├── m3u8.js                ← HLS-Parser (Master/Media, Key-Status, Variantenwahl)
 │       ├── ts-demux.js            ← MPEG-TS → Elementary Stream
 │       ├── assemble.js            ← Codec-Erkennung, Konkatenation, Dateinamen
 │       ├── aes.js                 ← AES-128-CBC + IV (WebCrypto)
 │       ├── gm-net.js              ← GM_xmlhttpRequest-Wrapper (+ fetch-Fallback)
 │       └── settings.js            ← GM-Speicher-Einstellungen
 ├── scripts/
-│   ├── build.mjs                  ← baut dist/xvkdownloader.user.js
+│   ├── build.mjs                  ← baut dist/xvkdownloader.user.js (Header + Konkatenation)
 │   ├── get_token.py               ← vkaudiotoken-python-Wrapper (Token-Fallback)
 │   └── fetch-ffmpeg-wasm.mjs      ← lädt ffmpeg.wasm (optional, AAC→MP3)
-└── test/
-    ├── run-tests.mjs              ← 24 Node-Unit-Tests
-    ├── fixtures.mjs               ← synthetische MP3/TS/ADTS/fMP4-Fixtures
-    ├── fixture-server.mjs         ← VK-Simulator für Browser-E2E
-    ├── cdp-check.mjs              ← CDP-Diagnose: Login-Status + Buttons (Port 9222)
-    ├── cdp-analyze.mjs            ← CDP-Live-Analyse: Klick + Netzwerk/Konsole/Fehler
-    ├── cdp-live.mjs               ← CDP-E2E: Klick, 40 s mitschneiden, MP3-Ordner prüfen
-    ├── netlog-analyze.mjs         ← NetLog-Analyse: Audio-Requests (Status/Fehler)
-    ├── netlog-stream.mjs          ← NetLog-Detail: m3u8-/Stream-Events
-    └── netlog-timeline.mjs        ← NetLog-Timeline: Stream-Events mit Zeiten
+├── test/
+│   ├── run-tests.mjs              ← 24 Node-Unit-Tests
+│   ├── fixtures.mjs               ← synthetische MP3/TS/ADTS/fMP4-Fixtures
+│   ├── fixture-server.mjs         ← VK-Simulator für Browser-E2E
+│   ├── cdp-check.mjs              ← CDP-Diagnose: Login-Status + Buttons (Port 9222)
+│   ├── cdp-analyze.mjs            ← CDP-Live-Analyse: Klick + Netzwerk/Konsole/Fehler
+│   ├── cdp-live.mjs               ← CDP-E2E: Klick, 40 s mitschneiden, MP3-Ordner prüfen
+│   ├── netlog-analyze.mjs         ← NetLog-Analyse: Audio-Requests (Status/Fehler)
+│   ├── netlog-stream.mjs          ← NetLog-Detail: m3u8-/Stream-Events
+│   └── netlog-timeline.mjs        ← NetLog-Timeline: Stream-Events mit Zeiten
+├── description.md                 ← Kurzbeschreibung für Greasy Fork (DE → RU → EN)
+└── Ausgabe/                       ← lokales Release-Archiv (gitignored; versionierte .user.js, bis v1.0.12)
 ```
+
+> **Hinweis Build-Version:** `scripts/build.mjs` trägt im Header aktuell `@version 1.0.10`,
+> während das ausgelieferte Artefakt `dist/xvkdownloader.user.js` auf **v1.0.12** steht
+> (ebenso `Ausgabe/xvkdownloader-1.0.12.user.js`). Vor dem nächsten Build muss die
+> Versionsnummer im `build.mjs`-Header angehoben werden, sonst erzeugt der Build eine
+> ältere Version.
+
+## Architektur
+
+Alle `src/`-Module sind klassische IIFEs, die sich am gemeinsamen Namensraum
+`globalThis.__VKD` registrieren (z. B. `NS.m3u8`, `NS.aes`, `NS.decoder`). Dadurch
+laufen **dieselben Dateien** unverändert in der Tampermonkey-Sandbox und unter Node
+(die Tests laden sie per `require` und nutzen `node:crypto` als WebCrypto-Polyfill).
+
+`scripts/build.mjs` ist bewusst **kein Bundler**: Es konkateniert die Module in fester
+Reihenfolge (`vk-decoder → m3u8 → ts-demux → assemble → aes → gm-net → settings →
+main`) in einen Userscript-Header + IIFE-Wrapper. Netzwerk läuft ausschließlich über
+`gm-net.js` (`GM_xmlhttpRequest`, fetch-Fallback), Downloads über `NS.gm.download`
+(Fallback: `<a download>`).
 
 ## Tests
 
 ```bash
 node test/run-tests.mjs        # 24 Unit-Tests (Decoder, m3u8, TS, Assemble, AES)
-node scripts/build.mjs         # Userscript bauen
+node scripts/build.mjs         # Userscript bauen (Achtung: setzt Header-Version aus build.mjs, s. o.)
 node test/fixture-server.mjs   # VK-Fixture-Server (Port 8765) für Browser-E2E
 node test/cdp-check.mjs        # Live-Diagnose am Browser (CDP, Port 9222): Login + Buttons
 node test/cdp-analyze.mjs      # Klick auf .vkd-btn + 25 s Netzwerk/Konsole/Fehler mitschneiden
+node test/cdp-live.mjs         # CDP-E2E: Tab öffnen, Klick, 40 s mitschneiden, Download-Ordner prüfen
+node test/netlog-analyze.mjs   # NetLog analysieren: Audio-Requests (Status/Fehler)
+node test/netlog-stream.mjs    # NetLog-Detail: m3u8-/Stream-Events
+node test/netlog-timeline.mjs  # NetLog-Timeline: Stream-Events mit Zeiten
 ```
+
+- Die CDP-Skripte (`cdp-*.mjs`) benötigen einen Browser mit Remote-Debugging auf
+  Port 9222 sowie **Node ≥ 21** (globales `WebSocket`).
+- `netlog-*.mjs` analysieren einen Chrome-NetLog (`chrome-net-export-log.json`,
+  Default-Pfad im jeweiligen Skript hinterlegt).
+- `VKD_TEST_FAILKEY=N` als Env-Variable beim `fixture-server.mjs` lässt die ersten N
+  Key-Requests mit HTTP 500 fehlschlagen — reproduziert den transienten
+  Key-Fehlerpfad inkl. Retry/Key-Cache.
 
 Der Browser-E2E lädt das echte Userscript (alle `src/`-Module) in eine
 VK-nachgebildete Seite (GM-APIs gestubbt) und prüft: Button-Injektion,
@@ -216,6 +252,17 @@ mit dem Quell-MP3) und Dateinamen.
   rechtlich gestattet ist (z. B. eigene Uploads). Private Nutzung.
 - Keine Garantie, dass VK den Zugriff nicht unterbindet; Token können
   an Gültigkeit verlieren.
+
+## Versionshistorie
+
+| Version | Inhalt |
+|---|---|
+| 1.0.12 | Kurzbeschreibung dreisprachig in `@description` (DE/EN/RU); `:de`/`:ru`-Zeilen entfernt; `description.md` auf DE → RU → EN vereinheitlicht |
+| 1.0.11 | Metablock-Beschreibungen auf GF-i18n-Format vereinheitlicht |
+| 1.0.10 | Fix: AES-Key-Cache verwirft abgelehnte Promises (Retry lädt Key neu) |
+| 1.0.9 | Rebranding VK Downloader → xVKDownloader (Name, Namespace, Build-Output, README) |
+| 1.0.8 | Userscript + Tooling + Tests |
+| 1.0.7 | Vorgängerversion („VK Downloader“) — nur noch als Archiv in `Ausgabe/` |
 
 ## Lizenz
 
