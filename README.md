@@ -193,11 +193,10 @@ xVKDownloader/
 └── Ausgabe/                       ← lokales Release-Archiv (gitignored; versionierte .user.js, bis v1.0.12)
 ```
 
-> **Hinweis Build-Version:** `scripts/build.mjs` trägt im Header aktuell `@version 1.0.10`,
-> während das ausgelieferte Artefakt `dist/xvkdownloader.user.js` auf **v1.0.12** steht
-> (ebenso `Ausgabe/xvkdownloader-1.0.12.user.js`). Vor dem nächsten Build muss die
-> Versionsnummer im `build.mjs`-Header angehoben werden, sonst erzeugt der Build eine
-> ältere Version.
+> **Hinweis Build-Version:** Die Versionsnummer wird **ausschließlich** im Header von
+> `scripts/build.mjs` gepflegt (Stand: **v1.0.12**) und beim Build in den Metablock von
+> `dist/xvkdownloader.user.js` übernommen. `node scripts/build.mjs` reproduziert das
+> veröffentlichte Artefakt byte-identisch.
 
 ## Architektur
 
