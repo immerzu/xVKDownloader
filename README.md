@@ -163,7 +163,7 @@ Beobachtete API-Methoden (weitere): `web.api.vk.ru/method/catalog.getAudioSearch
 ```
 xVKDownloader/
 ├── dist/
-│   ├── xvkdownloader.user.js      ← INSTALLIERBARES Userscript (gebaut; aktuell v1.0.14)
+│   ├── xvkdownloader.user.js      ← INSTALLIERBARES Userscript (gebaut; aktuell v1.0.15)
 │   └── vendor/ffmpeg/             ← ffmpeg.wasm (optional; gitignored, per fetch-ffmpeg-wasm.mjs)
 ├── src/
 │   ├── main.js                    ← UI, Resolution, Download-Pipeline
@@ -190,11 +190,11 @@ xVKDownloader/
 │   ├── netlog-stream.mjs          ← NetLog-Detail: m3u8-/Stream-Events
 │   └── netlog-timeline.mjs        ← NetLog-Timeline: Stream-Events mit Zeiten
 ├── description.md                 ← Kurzbeschreibung für Greasy Fork (DE → RU → EN)
-└── Ausgabe/                       ← lokales Release-Archiv (gitignored; versionierte .user.js, bis v1.0.14)
+└── Ausgabe/                       ← lokales Release-Archiv (gitignored; versionierte .user.js, bis v1.0.15)
 ```
 
 > **Hinweis Build-Version:** Die Versionsnummer wird **ausschließlich** im Header von
-> `scripts/build.mjs` gepflegt (Stand: **v1.0.14**) und beim Build in den Metablock von
+> `scripts/build.mjs` gepflegt (Stand: **v1.0.15**) und beim Build in den Metablock von
 > `dist/xvkdownloader.user.js` übernommen. `node scripts/build.mjs` reproduziert das
 > veröffentlichte Artefakt byte-identisch. **Jedes neue Release** (Version immer leicht
 > anheben) wird zusätzlich als versionierte Kopie unter
@@ -258,6 +258,7 @@ mit dem Quell-MP3) und Dateinamen.
 
 | Version | Inhalt |
 |---|---|
+| 1.0.15 | Kurzbeschreibung lokalisiert: `@description` (DE, Default) + `@description:en` + `@description:ru` — Skript ist damit in der GF-Suche unter DE/EN/RU auffindbar (GF-Sprachfilter) |
 | 1.0.14 | Download-Pfeil auf leuchtendes Signalgrün `#00c853` umgestellt (gut sichtbar auf hellem und dunklem VK-Theme) |
 | 1.0.13 | Download-Pfeil (⬇-Button) grün eingefärbt (Standard `#2e7d32`, Hover `#1b5e20`); Fehlerzustand bleibt rot |
 | 1.0.12 | Kurzbeschreibung dreisprachig in `@description` (DE/EN/RU); `:de`/`:ru`-Zeilen entfernt; `description.md` auf DE → RU → EN vereinheitlicht |
