@@ -1,5 +1,10 @@
 # Projektregeln — xVKDownloader
 
+> **Projektgedächtnis:** `memory/FACT.md` (dauerhaftes Projektwissen, Erkenntnisse) +
+> `memory/JOURNAL.jsonl` (Arbeitsjournal). Bei jeder relevanten Änderung FACT.md
+> aktualisieren (Stand-Zeile oben mitziehen!) und einen JOURNAL-Eintrag ergänzen.
+> Beschreibungs-Konvention + Wortlaute: globaler Skill `userscript-beschreibungen-immerzu`.
+
 ## Release-Workflow (dauerhafte Regel des Nutzers)
 
 - Jede Änderung am Userscript wird als neues Release gebaut, **die Version wird dabei
