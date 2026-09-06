@@ -196,7 +196,9 @@ xVKDownloader/
 > **Hinweis Build-Version:** Die Versionsnummer wird **ausschließlich** im Header von
 > `scripts/build.mjs` gepflegt (Stand: **v1.0.13**) und beim Build in den Metablock von
 > `dist/xvkdownloader.user.js` übernommen. `node scripts/build.mjs` reproduziert das
-> veröffentlichte Artefakt byte-identisch.
+> veröffentlichte Artefakt byte-identisch. **Jedes neue Release** (Version immer leicht
+> anheben) wird zusätzlich als versionierte Kopie unter
+> `Ausgabe/xvkdownloader-<version>.user.js` archiviert (siehe `AGENTS.md`).
 
 ## Architektur
 
