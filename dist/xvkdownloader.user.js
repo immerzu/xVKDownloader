@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         xVKDownloader
 // @namespace    local.xvkdownloader
-// @version      1.0.13
+// @version      1.0.14
 // @description  Download-Button pro Track auf VK Audio-Seiten (vk.com/vk.ru); lädt den HLS-Stream und speichert MP3 lokal. Tampermonkey-kompatibel. / Download button for each track on VK Audio pages (vk.com/vk.ru); loads the HLS stream and saves MP3 locally. Tampermonkey-compatible. / Кнопка загрузки для каждого трека на страницах VK Audio (vk.com/vk.ru); загружает HLS-поток и сохраняет MP3 локально. Совместимо с Tampermonkey.
 // @author       Ede
 // @match        https://vk.com/*
@@ -911,13 +911,13 @@
   var STYLES = '' +
     '.vkd-btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;' +
     'width:28px!important;height:28px!important;border-radius:50%!important;cursor:pointer!important;' +
-    'flex-shrink:0!important;color:#2e7d32!important;' +
+    'flex-shrink:0!important;color:#00c853!important;' +
     'transition:background .15s,color .15s!important;text-decoration:none!important;margin-left:2px!important;' +
     'position:relative!important;z-index:1000!important;vertical-align:middle!important;' +
     'background:transparent!important;pointer-events:auto!important;border:none!important;padding:0!important;}' +
     '.vkd-btn.vkd-err{color:#e53935!important;}' +
     '.vkd-btn.vkd-err:hover{background:rgba(229,57,53,.12)!important;color:#e53935!important;}' +
-    '.vkd-btn:hover{background:rgba(46,125,50,.15)!important;color:#1b5e20!important;}' +
+    '.vkd-btn:hover{background:rgba(0,200,83,.18)!important;}' +
     '.vkd-btn .vkd-ico{width:16px;height:16px;display:block;}' +
     '.vkd-tip{display:none!important;position:fixed!important;padding:4px 10px!important;' +
     'background:#1a1a2e!important;color:#e0e0e0!important;font:600 11px/1.4 system-ui,sans-serif!important;' +
