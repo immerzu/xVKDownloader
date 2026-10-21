@@ -25,6 +25,7 @@
     'flex-shrink:0!important;color:#00c853!important;' +
     'transition:background .15s,color .15s!important;text-decoration:none!important;margin-left:2px!important;' +
     'position:relative!important;z-index:1000!important;vertical-align:middle!important;' +
+    'justify-self:end!important;align-self:center!important;' +
     'background:transparent!important;pointer-events:auto!important;border:none!important;padding:0!important;}' +
     '.vkd-btn.vkd-err{color:#e53935!important;}' +
     '.vkd-btn.vkd-err:hover{background:rgba(229,57,53,.12)!important;color:#e53935!important;}' +
@@ -130,23 +131,24 @@
   }
 
   /**
-   * Platzierung: bevorzugt VOR „Snippet öffnen“ (MusicAudio_OpenSnippet) in der
-   * audiorow-actions-Zelle (stabil beim Hover), sonst Duration-Zelle, sonst Row.
+   * Platzierung: rechts in der Zeile, direkt VOR der Actions-Zelle (immer sichtbar,
+   * schiebt die Hover-Icons nicht auseinander) — sonst Dauer-Zelle, sonst Row.
+   * Einzel-Audio-Seite: Actions-Zelle des Track-Blocks.
    * @returns {{mount:Element, before:Element|null}}
    */
   function findMount(row) {
-    var snippet = row.querySelector('[data-testid="MusicAudio_OpenSnippet"]');
-    if (snippet && snippet.parentElement) return { mount: snippet.parentElement, before: snippet };
-    var actions = row.querySelector('[data-testid="audiorow-actions"]');
-    if (actions) {
-      var inner = actions.firstElementChild || actions;
-      return { mount: inner, before: inner.firstElementChild || null };
+    /* Rechts in der Zellenzeile, direkt vor der Dauer (CSS: justify-self:end).
+       Die Actions-Zelle taucht erst beim Hover auf und liegt noch weiter rechts. */
+    var dur = row.querySelector('[data-testid$="_Duration"], [data-testid*="Duration"]');
+    var info = row.querySelector('[data-testid="MusicTrackRow_Info"]') || row.querySelector('[data-testid$="_Info"]');
+    if (dur && dur.parentElement && info) {
+      var cell = dur.parentElement;
+      while (cell && cell !== row && !cell.contains(info)) cell = cell.parentElement;
+      if (cell && cell !== row) return { mount: cell, before: null };
     }
     /* Einzel-Audio-Seite (/audio<owner>_<id>_<access>): Actions-Zelle des Track-Blocks */
     var actionsGroup = row.querySelector('[data-testid="MusicAudio_ActionsGroup"]');
     if (actionsGroup) return { mount: actionsGroup, before: null };
-    var dur = row.querySelector('[data-testid$="_Duration"], [data-testid*="Duration"]');
-    if (dur) return { mount: dur, before: null };
     return { mount: row, before: null };
   }
 

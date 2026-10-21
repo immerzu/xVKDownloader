@@ -1,4 +1,4 @@
-# xVKDownloader — FACT SHEET (Stand: v1.0.16, 2026-10-21)
+# xVKDownloader — FACT SHEET (Stand: v1.0.17, 2026-10-21)
 
 Dauerhaftes Projektwissen zum xVKDownloader-Userscript (VK Audio → echtes MP3, Tampermonkey).
 Bei jeder Änderung die Stand-Zeile oben + JOURNAL.jsonl aktualisieren. Kurz-Regeln (bindend):
@@ -43,6 +43,14 @@ Bei jeder Änderung die Stand-Zeile oben + JOURNAL.jsonl aktualisieren. Kurz-Reg
   (`/audio<owner>_<id>_<access>`, `data-testid="MusicAudio_TrackBlock"`) bekamen nie einen Button —
   Row-Regex + `findMount` (`MusicAudio_ActionsGroup`) + Track-Extraktion (IDs aus `location.pathname`,
   Titel aus `AudioAudioPage_Title`, Interpret aus `MusicAudio_Author`) erweitert.
+- **v1.0.17** (2026-10-21) – **Button-Position** (Wunsch des Nutzers nach Screenshot): lag mitten in
+  der Hover-Iconreihe (vor `MusicAudio_OpenSnippet`). Neu: `findMount` hängt ihn in die
+  **Grid-Zellenzeile** (`vkit-6jgEbc`, enthält `MusicTrackRow_Info` und die Dauer) und das CSS setzt
+  `justify-self:end` → er steht **rechts in der Zeile, direkt links neben der Dauer**, immer
+  sichtbar; beim Hover erscheinen die Icons rechts davon (kein Auseinanderreißen, kein Springen).
+  Belegt im Testprofil: ohne Hover Button 790–818 px, Dauer 830–857 px; mit Hover Button 641–669 px,
+  Actions 669–861 px. Gäste-Fall: Grid hat feste Spalten (`52px 101px 199px 43px`) — ohne
+  `justify-self:end` landet der Button in der breiten Titel-Spalte (verworfen).
 
 ## WICHTIGE Erkenntnisse (Session 2026-09-06)
 
@@ -118,3 +126,4 @@ Segment-Parallelität fest 3 (`settings.js`, nicht im Dialog änderbar).
 - VK kann Schutz jederzeit ändern (Stand Aug 2026 verifiziert); AAC-Streams → `.m4a/.aac`
   (echtes MP3 nur mit experimenteller ffmpeg.wasm-Transkodierung); nur Inhalte mit
   Download-Berechtigung (rechtlicher Hinweis).
+

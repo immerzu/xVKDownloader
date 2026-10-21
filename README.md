@@ -167,7 +167,7 @@ Beobachtete API-Methoden (weitere): `web.api.vk.ru/method/catalog.getAudioSearch
 ```
 xVKDownloader/
 ├── dist/
-│   ├── xvkdownloader.user.js      ← INSTALLIERBARES Userscript (gebaut; aktuell v1.0.16)
+│   ├── xvkdownloader.user.js      ← INSTALLIERBARES Userscript (gebaut; aktuell v1.0.17)
 │   └── vendor/ffmpeg/             ← ffmpeg.wasm (optional; gitignored, per fetch-ffmpeg-wasm.mjs)
 ├── src/
 │   ├── main.js                    ← UI, Resolution, Download-Pipeline
@@ -194,11 +194,11 @@ xVKDownloader/
 │   ├── netlog-stream.mjs          ← NetLog-Detail: m3u8-/Stream-Events
 │   └── netlog-timeline.mjs        ← NetLog-Timeline: Stream-Events mit Zeiten
 ├── description.md                 ← Kurzbeschreibung für Greasy Fork (DE → RU → EN)
-└── Ausgabe/                       ← lokales Release-Archiv (gitignored; versionierte .user.js, bis v1.0.16)
+└── Ausgabe/                       ← lokales Release-Archiv (gitignored; versionierte .user.js, bis v1.0.17)
 ```
 
 > **Hinweis Build-Version:** Die Versionsnummer wird **ausschließlich** im Header von
-> `scripts/build.mjs` gepflegt (Stand: **v1.0.16**) und beim Build in den Metablock von
+> `scripts/build.mjs` gepflegt (Stand: **v1.0.17**) und beim Build in den Metablock von
 > `dist/xvkdownloader.user.js` übernommen. `node scripts/build.mjs` reproduziert das
 > veröffentlichte Artefakt byte-identisch. **Jedes neue Release** (Version immer leicht
 > anheben) wird zusätzlich als versionierte Kopie unter
@@ -262,6 +262,7 @@ mit dem Quell-MP3) und Dateinamen.
 
 | Version | Inhalt |
 |---|---|
+| 1.0.17 | Download-Button umplatziert: steht jetzt **rechts in der Zeile, direkt links neben der Dauer** (`justify-self:end` in der Grid-Zellenzeile) statt mitten in der Hover-Iconreihe — immer sichtbar, verschiebt beim Hover keine Icons. Einzel-Audio-Seite unverändert in der Actions-Zelle |
 | 1.0.16 | Fix nach VK-Umstellung (21.10.2026): `apiAudio.url` liefert eine **direkte MP3-Datei** statt einer HLS-Playlist — das Skript lud sie als Playlist-Text und scheiterte am CDN (`HTTP 400 …/acmp/ID3%04…`). Neu: die erste Antwort wird als Bytes geladen; nur wenn sie mit `#EXTM3U` beginnt, läuft die Segment-Pipeline, sonst wird die Datei direkt gespeichert (Extension per Codec-Erkennung). Außerdem: Einzel-Audio-Seiten (`/audio<owner>_<id>_<access>`, `data-testid="MusicAudio_TrackBlock"`) erhalten jetzt ebenfalls einen Button — IDs aus dem Pfad, Titel/Interpret aus `AudioAudioPage_Title`/`MusicAudio_Author` |
 | 1.0.15 | Kurzbeschreibung lokalisiert: `@description` (DE, Default) + `@description:en` + `@description:ru` — Skript ist damit in der GF-Suche unter DE/EN/RU auffindbar (GF-Sprachfilter) |
 | 1.0.14 | Download-Pfeil auf leuchtendes Signalgrün `#00c853` umgestellt (gut sichtbar auf hellem und dunklem VK-Theme) |
@@ -276,3 +277,4 @@ mit dem Quell-MP3) und Dateinamen.
 ## Lizenz
 
 MIT — nur private Nutzung. Keine Veröffentlichung in App-Stores.
+
