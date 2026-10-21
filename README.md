@@ -143,7 +143,11 @@ Der aktuelle VK-Audio-Fluss (live im Browser beobachtet):
    `al=1&audio_ids=<owner>_<id>_` (kommagetrennt, nachgestellter Unterstrich).
    Antwort: `{"payload":[0,[[<track>,…]]]}` — pro Track ein Feld-Array mit der
    obfuskierten Stream-URL bei **Index 2** (`https://vk.ru/mp3/audio_api_unavailable.mp3?extra=…#…`).
-   Zusätzlich steckt im React-Fiber (`apiAudio`) bereits eine direkte m3u8-URL.
+   Zusätzlich steckt im React-Fiber (`apiAudio`) bereits eine Stream-URL.
+   **Seit Oktober 2026** ist das dort eine **direkte MP3-Datei**
+   (`…/acmp/<id>.mp3?siren=1`, `audio/mpeg`, z. B. 7,2 MB / 320 kbps) statt einer
+   m3u8-Playlist — das Skript erkennt das am Inhalt (`#EXTM3U`) und speichert
+   solche Dateien ohne Segment-Pipeline (v1.0.16).
 2. **Obfuskation**: Die `audio_api_unavailable`-URL wird mit dem klassischen
    v/r/s/i/x-Algorithmus (Base64-Daten + Op-Liste) entschlüsselt → echte
    m3u8-URL auf `*.vkuseraudio.net`.
@@ -163,7 +167,7 @@ Beobachtete API-Methoden (weitere): `web.api.vk.ru/method/catalog.getAudioSearch
 ```
 xVKDownloader/
 ├── dist/
-│   ├── xvkdownloader.user.js      ← INSTALLIERBARES Userscript (gebaut; aktuell v1.0.15)
+│   ├── xvkdownloader.user.js      ← INSTALLIERBARES Userscript (gebaut; aktuell v1.0.16)
 │   └── vendor/ffmpeg/             ← ffmpeg.wasm (optional; gitignored, per fetch-ffmpeg-wasm.mjs)
 ├── src/
 │   ├── main.js                    ← UI, Resolution, Download-Pipeline
@@ -190,11 +194,11 @@ xVKDownloader/
 │   ├── netlog-stream.mjs          ← NetLog-Detail: m3u8-/Stream-Events
 │   └── netlog-timeline.mjs        ← NetLog-Timeline: Stream-Events mit Zeiten
 ├── description.md                 ← Kurzbeschreibung für Greasy Fork (DE → RU → EN)
-└── Ausgabe/                       ← lokales Release-Archiv (gitignored; versionierte .user.js, bis v1.0.15)
+└── Ausgabe/                       ← lokales Release-Archiv (gitignored; versionierte .user.js, bis v1.0.16)
 ```
 
 > **Hinweis Build-Version:** Die Versionsnummer wird **ausschließlich** im Header von
-> `scripts/build.mjs` gepflegt (Stand: **v1.0.15**) und beim Build in den Metablock von
+> `scripts/build.mjs` gepflegt (Stand: **v1.0.16**) und beim Build in den Metablock von
 > `dist/xvkdownloader.user.js` übernommen. `node scripts/build.mjs` reproduziert das
 > veröffentlichte Artefakt byte-identisch. **Jedes neue Release** (Version immer leicht
 > anheben) wird zusätzlich als versionierte Kopie unter
@@ -258,6 +262,7 @@ mit dem Quell-MP3) und Dateinamen.
 
 | Version | Inhalt |
 |---|---|
+| 1.0.16 | Fix nach VK-Umstellung (21.10.2026): `apiAudio.url` liefert eine **direkte MP3-Datei** statt einer HLS-Playlist — das Skript lud sie als Playlist-Text und scheiterte am CDN (`HTTP 400 …/acmp/ID3%04…`). Neu: die erste Antwort wird als Bytes geladen; nur wenn sie mit `#EXTM3U` beginnt, läuft die Segment-Pipeline, sonst wird die Datei direkt gespeichert (Extension per Codec-Erkennung). Außerdem: Einzel-Audio-Seiten (`/audio<owner>_<id>_<access>`, `data-testid="MusicAudio_TrackBlock"`) erhalten jetzt ebenfalls einen Button — IDs aus dem Pfad, Titel/Interpret aus `AudioAudioPage_Title`/`MusicAudio_Author` |
 | 1.0.15 | Kurzbeschreibung lokalisiert: `@description` (DE, Default) + `@description:en` + `@description:ru` — Skript ist damit in der GF-Suche unter DE/EN/RU auffindbar (GF-Sprachfilter) |
 | 1.0.14 | Download-Pfeil auf leuchtendes Signalgrün `#00c853` umgestellt (gut sichtbar auf hellem und dunklem VK-Theme) |
 | 1.0.13 | Download-Pfeil (⬇-Button) grün eingefärbt (Standard `#2e7d32`, Hover `#1b5e20`); Fehlerzustand bleibt rot |

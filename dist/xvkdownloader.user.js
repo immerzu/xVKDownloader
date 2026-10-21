@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         xVKDownloader
 // @namespace    local.xvkdownloader
-// @version      1.0.15
+// @version      1.0.16
 // @description  Download-Button pro Track auf VK Audio-Seiten (vk.com/vk.ru); lädt den HLS-Stream und speichert MP3 lokal. Tampermonkey-kompatibel.
 // @description:en  Download button for each track on VK Audio pages (vk.com/vk.ru); loads the HLS stream and saves MP3 locally. Tampermonkey-compatible.
 // @description:ru  Кнопка загрузки для каждого трека на страницах VK Audio (vk.com/vk.ru); загружает HLS-поток и сохраняет MP3 локально. Совместимо с Tampermonkey.
@@ -986,7 +986,7 @@
   }
 
   /* ---------- DOM-Scan / Button-Injektion ---------- */
-  function rowTestIdRe() { return /^(AudioLayer_PlaybackQueue_)?(MusicTrack|PodcastEpisodes?)(Cell|Row|Item)$/; }
+  function rowTestIdRe() { return /^(AudioLayer_PlaybackQueue_)?(MusicTrack|PodcastEpisodes?)(Cell|Row|Item)$|^MusicAudio_TrackBlock$/; }
 
   /** Scannt den Knoten bzw. — falls er in einer Track-Row liegt — die Row. */
   function scanContainer(root) {
@@ -1033,6 +1033,9 @@
       var inner = actions.firstElementChild || actions;
       return { mount: inner, before: inner.firstElementChild || null };
     }
+    /* Einzel-Audio-Seite (/audio<owner>_<id>_<access>): Actions-Zelle des Track-Blocks */
+    var actionsGroup = row.querySelector('[data-testid="MusicAudio_ActionsGroup"]');
+    if (actionsGroup) return { mount: actionsGroup, before: null };
     var dur = row.querySelector('[data-testid$="_Duration"], [data-testid*="Duration"]');
     if (dur) return { mount: dur, before: null };
     return { mount: row, before: null };
@@ -1117,6 +1120,22 @@
           ids: m[1] + '_' + m[2] + (m[3] ? '_' + m[3] : ''),
           artist: artistEl ? (artistEl.textContent || '').trim() : '',
           title: titleEl ? (titleEl.textContent || '').trim() : '',
+          subtitle: '',
+          duration: 0,
+          url: ''
+        };
+      }
+    }
+    /* Fallback: Einzel-Audio-Seite /audio<owner>_<id>_<access> (kein Link zur Row) */
+    if (row.getAttribute('data-testid') === 'MusicAudio_TrackBlock') {
+      var pm = /\/audio(-?\d+)_(\d+)(?:_([0-9a-f]+))?/.exec(location.pathname);
+      if (pm) {
+        var tEl2 = row.querySelector('[data-testid="AudioAudioPage_Title"]') || doc.querySelector('[data-testid="AudioAudioPage_Title"]');
+        var aEl2 = row.querySelector('[data-testid="MusicAudio_Author"]') || doc.querySelector('[data-testid="MusicAudio_Author"]');
+        return {
+          ids: pm[1] + '_' + pm[2] + (pm[3] ? '_' + pm[3] : ''),
+          artist: aEl2 ? (aEl2.textContent || '').trim() : '',
+          title: tEl2 ? (tEl2.textContent || '').trim() : '',
           subtitle: '',
           duration: 0,
           url: ''
@@ -1211,25 +1230,44 @@
     console.warn('[xVKDownloader]', msg);
   }
 
-  function fetchAndAssemble(m3u8Url, tip) {
-    tip.textContent = 'manifest…';
-    return net.getText(m3u8Url).then(function (text) {
-      var pl = m3u8.parsePlaylist(text);
-      if (pl.type === 'master') {
-        var v = m3u8.pickVariant(pl.variants);
-        if (!v) throw new Error('keine Variante im Master-Playlist');
-        var vUrl = m3u8.resolveUri(m3u8Url, v.uri);
-        return net.getText(vUrl).then(function (t2) {
-          return { playlistUrl: vUrl, pl: m3u8.parsePlaylist(t2) };
-        });
-      }
-      return { playlistUrl: m3u8Url, pl: pl };
-    }).then(function (media) {
-      if (media.pl.encrypted && !media.pl.segments.some(function (s) { return s.encrypted; })) {
-        /* Verschlüsselung nur zwischenzeitlich markiert — kein verschlüsseltes Segment */
-      }
-      return downloadSegments(media, tip);
+  /** Erkennt eine HLS-Playlist am Kopf (#EXTM3U). */
+  function isPlaylistBytes(bytes) {
+    var head = '';
+    for (var i = 0; i < bytes.length && i < 16; i++) head += String.fromCharCode(bytes[i]);
+    return head.indexOf('#EXTM3U') === 0;
+  }
+
+  function bytesToText(bytes) {
+    if (typeof TextDecoder !== 'undefined') return new TextDecoder('utf-8').decode(bytes);
+    var s = '';
+    for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+    return s;
+  }
+
+  function fetchAndAssemble(url, tip) {
+    tip.textContent = 'lade…';
+    return net.getBytes(url, { timeout: 60000 }).then(function (raw) {
+      /* VK liefert bei apiAudio inzwischen direkte Audiodateien (mp3) statt einer
+         HLS-Playlist — dann ohne Segment-Pipeline speichern. */
+      if (!isPlaylistBytes(raw)) return assemble.concatSegments([raw]);
+      return loadHls(url, bytesToText(raw), tip);
     });
+  }
+
+  function loadHls(m3u8Url, text, tip) {
+    var pl = m3u8.parsePlaylist(text);
+    var p;
+    if (pl.type === 'master') {
+      var v = m3u8.pickVariant(pl.variants);
+      if (!v) return Promise.reject(new Error('keine Variante im Master-Playlist'));
+      var vUrl = m3u8.resolveUri(m3u8Url, v.uri);
+      p = net.getText(vUrl).then(function (t2) {
+        return { playlistUrl: vUrl, pl: m3u8.parsePlaylist(t2) };
+      });
+    } else {
+      p = Promise.resolve({ playlistUrl: m3u8Url, pl: pl });
+    }
+    return p.then(function (media) { return downloadSegments(media, tip); });
   }
 
   function downloadSegments(media, tip) {

@@ -1,4 +1,4 @@
-# xVKDownloader — FACT SHEET (Stand: v1.0.15, 2026-09-06)
+# xVKDownloader — FACT SHEET (Stand: v1.0.16, 2026-10-21)
 
 Dauerhaftes Projektwissen zum xVKDownloader-Userscript (VK Audio → echtes MP3, Tampermonkey).
 Bei jeder Änderung die Stand-Zeile oben + JOURNAL.jsonl aktualisieren. Kurz-Regeln (bindend):
@@ -34,6 +34,15 @@ Bei jeder Änderung die Stand-Zeile oben + JOURNAL.jsonl aktualisieren. Kurz-Reg
     in `src/main.js` (`STYLES`-Konstante). Zentral an einer Stelle änderbar.
 - **v1.0.15** – Kurzbeschreibung LOKALISIERT (siehe Erkenntnis 2) — Auffindbarkeit in allen
   Sprach-Suchen.
+- **v1.0.16** (2026-10-21) – **VK-Formatwechsel**: `apiAudio.url` im React-Fiber liefert eine
+  **direkte MP3-Datei** (`…/v1/acmp/<id>.mp3?siren=1`, `audio/mpeg`, ~7,2 MB, 320 kbps/44,1 kHz),
+  keine HLS-Playlist mehr. v1.0.15 lud sie als Playlist-Text → jede Folge-URL kaputt
+  (`HTTP 400 …/acmp/ID3%04…`, Tooltip rot). Fix: `fetchAndAssemble` lädt die erste Antwort als
+  **Bytes**; nur bei Kopf `#EXTM3U` läuft die Segment-Pipeline, sonst `assemble.concatSegments([raw])`
+  (Codec-/Extension-Erkennung) und direkt speichern. Zweiter Fix: **Einzel-Audio-Seiten**
+  (`/audio<owner>_<id>_<access>`, `data-testid="MusicAudio_TrackBlock"`) bekamen nie einen Button —
+  Row-Regex + `findMount` (`MusicAudio_ActionsGroup`) + Track-Extraktion (IDs aus `location.pathname`,
+  Titel aus `AudioAudioPage_Title`, Interpret aus `MusicAudio_Author`) erweitert.
 
 ## WICHTIGE Erkenntnisse (Session 2026-09-06)
 
@@ -71,6 +80,27 @@ Bei jeder Änderung die Stand-Zeile oben + JOURNAL.jsonl aktualisieren. Kurz-Reg
 4. **Globale Skills (2026-09-06 angelegt/aktualisiert):** Neuer Skill
    `userscript-beschreibungen-immerzu` (Konvention + Wortlaute aller drei Skripte);
    `greasy-fork-publish` und `github-immerzu` auf die lokalisierte Konvention korrigiert.
+
+5. **VK liefert MP3 statt HLS (live belegt 2026-10-21, anonym bei vk.ru):**
+   - Fiber-URL im Track (`apiAudio.url`, bei anonymen Aufrufen auch `audio.getById` über
+     `web.api.vk.ru`): `https://cs1-77v4.vkuseraudio.ru/s/v1/acmp/<hash>.mp3?siren=1` →
+     `206 audio/mpeg`, `Content-Range: bytes 0-2047/7127084`, ID3-Kopf, `analyzeMp3`:
+     320 kbps/44,1 kHz, 180 s, `frameCoverage 1` → **kein 30-s-Preview**.
+   - `al_audio.php?act=reload_audios` **existiert weiter** und liefert für `audio_ids=<owner>_<id>_`
+     ein Feld-Array (32 Felder, URL bei Index 2), obfuskiert als
+     `https://vk.ru/mp3/audio_api_unavailable.mp3?extra=…#…`; der eigene Decoder löst sie zu einer
+     **m3u8** (`…/s/v1/acs/<hash>/index.m3u8?siren=1`) auf, Playlist unverändert AES-128 +
+     `seg-XX-a2.ts` (anonym nur ~31 s Inhalte). Der HLS-Weg bleibt also gültig — beide Wege müssen
+     im Skript funktionieren.
+   - Fehlerbild vor dem Fix: Tooltip `HTTP 400 für https://cs1-…/acmp/ID3%04…` (Binärdaten wurden
+     als Playlist-Text geparst und als Basis-URL verwendet).
+
+6. **Tampermonkey 5.5.1 benennt Blob-Downloads falsch (belegt 2026-10-21):**
+   `GM_download({url: <blob:>, name: 'GM Testname 42.mp3'})` → Datei heißt
+   `<uuid>.mp3` (UUID der Object-URL), der `name` wird ignoriert. Gleicher Blob per
+   `a.download = 'xVKD Testname 1.mp3'` → korrekter Name. Betrifft `saveResult` in `src/main.js`
+   (v1.0.16 noch unverändert, d. h. UUID-Dateinamen sind derzeit zu erwarten) — Workaround wäre
+   `anchorFallback` zuerst. Nicht beauftragt, nur festgehalten.
 
 ## Aktuelle GF-Kurzbeschreibung (Wortlaut v1.0.15)
 - DE (Default): `Download-Button pro Track auf VK Audio-Seiten (vk.com/vk.ru); lädt den HLS-Stream und speichert MP3 lokal. Tampermonkey-kompatibel.`
