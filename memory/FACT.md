@@ -61,6 +61,8 @@ Bei jeder Änderung die Stand-Zeile oben + JOURNAL.jsonl aktualisieren. Kurz-Reg
   rechtes Ende `audiorow-actions`; Klick lädt weiter (7 038 475 B MP3). Achtung: eine
   **Neuinstallation** in Tampermonkey setzt die gemerkten `@connect`-Erlaubnisse zurück → einmalige
   „fremde Ressource"-Abfrage für `cs1-*.vkuseraudio.ru` (normales Update behält sie).
+  **Veröffentlicht am 2026-10-21:** GF `590156` zeigt `version 1.0.18`, `code_updated_at`
+  2026-10-21T11:01:39Z, Locale `de` (Webhook-Sync nach dem Push auf `main`).
 
 ## WICHTIGE Erkenntnisse (Session 2026-09-06)
 
@@ -136,5 +138,6 @@ Segment-Parallelität fest 3 (`settings.js`, nicht im Dialog änderbar).
 - VK kann Schutz jederzeit ändern (Stand Aug 2026 verifiziert); AAC-Streams → `.m4a/.aac`
   (echtes MP3 nur mit experimenteller ffmpeg.wasm-Transkodierung); nur Inhalte mit
   Download-Berechtigung (rechtlicher Hinweis).
+
 
 

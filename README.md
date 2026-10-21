@@ -2,13 +2,13 @@
 
 ## English 🇬🇧
 
-Tampermonkey userscript that adds a **download button per track** on VK Audio pages (vk.com / vk.ru). It downloads the complete HLS stream, decrypts it, demuxes it and saves a **real MP3 file** (`Artist - Title.mp3`) locally.
+Tampermonkey userscript that adds a **download button per track** on VK Audio pages (vk.com / vk.ru). It downloads the complete stream — HLS playlist with AES-128, or a directly served MP3 file (VK, since 10/2026) — decrypts/demuxes it if needed and saves a **real MP3 file** (`Artist - Title.mp3`) locally.
 
 Compatible with **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Works on all VK Audio surfaces: search, your own audios, playlists and recommendations.
 
 **Features:**
-- Download button (⬇) per track in `[data-testid="MusicTrackRow"]` rows
-- Full pipeline: m3u8 playlist → segments (AES-128 decryption) → concatenation → TS demux → **real MP3** (no container renaming)
+- Download button (⬇) per track in `[data-testid="MusicTrackRow"]` rows — on hover at the right end of the icon bar (behind •••), in idle rows below the duration
+- Full pipeline: m3u8 playlist → segments (AES-128 decryption) → concatenation → TS demux → **real MP3** (no container renaming); direct MP3 URLs are saved without the segment pipeline
 - Correct filenames: `Artist - Title.mp3` (special characters cleaned)
 - Progress in the tooltip (`Segment 3/11`, `saving…`, `saved`)
 - Works on search, own audios, playlists, recommendations (SPA-safe)
@@ -25,7 +25,7 @@ Compatible with **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Works on all VK Audi
 **Usage:**
 1. **Log in to VK** (session cookie required — the userscript uses your normal logged-in state, **no** separate token needed).
 2. Open an audio page, e.g. `https://vk.ru/audio?performer=1&q=Chris%20Lake%2C%20ATRIP`.
-3. Each track row shows a **⬇-button** on the right.
+3. Each track row shows a **⬇-button** on the right: on hover at the right end of the icon bar (behind •••), in idle rows below the duration.
 4. **Click ⬇** to download the track: the tooltip shows progress, the MP3 is saved to your default download folder (`Artist - Title.mp3`).
 5. Download multiple tracks one after another — each click starts its own download.
 
@@ -33,13 +33,13 @@ Compatible with **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Works on all VK Audi
 
 ## Deutsch 🇩🇪
 
-Tampermonkey-Userscript, das auf VK-Audio-Seiten (vk.com / vk.ru) einen **Download-Button pro Track** einfügt, den HLS-Stream vollständig herunterlädt, entschlüsselt und als **echte MP3-Datei** (`Künstler - Titel.mp3`) lokal speichert.
+Tampermonkey-Userscript, das auf VK-Audio-Seiten (vk.com / vk.ru) einen **Download-Button pro Track** einfügt, den Stream vollständig herunterlädt — HLS-Playlist mit AES-128 oder direkt gelieferte MP3-Datei (VK, seit 10/2026) —, ihn bei Bedarf entschlüsselt/demuxt und als **echte MP3-Datei** (`Künstler - Titel.mp3`) lokal speichert.
 
 Kompatibel mit **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Läuft auf allen VK-Audio-Oberflächen: Suche, eigene Audios, Playlists, Empfehlungen.
 
 **Funktionen:**
-- **Download-Button** (⬇) pro Track in `[data-testid="MusicTrackRow"]`-Zeilen
-- Vollständige Pipeline: m3u8-Playlist → Segmente (AES-128-Entschlüsselung) → Konkatenation → TS-Demux → **echtes MP3** (kein Container-Umbenennen)
+- **Download-Button** (⬇) pro Track in `[data-testid="MusicTrackRow"]`-Zeilen — beim Hover am rechten Ende der Icon-Leiste (hinter •••), in ruhigen Zeilen unter der Dauerangabe
+- Vollständige Pipeline: m3u8-Playlist → Segmente (AES-128-Entschlüsselung) → Konkatenation → TS-Demux → **echtes MP3** (kein Container-Umbenennen); direkt gelieferte MP3-URLs werden ohne Segment-Pipeline gespeichert
 - Korrekter Dateiname: `Künstler - Titel.mp3` (Sonderzeichen bereinigt)
 - Fortschrittsanzeige im Tooltip (`Segment 3/11`, `speichere…`, `gespeichert`)
 - Funktioniert auf Suche, eigenen Audios, Playlists, Empfehlungen (SPA-navigationssicher)
@@ -56,7 +56,7 @@ Kompatibel mit **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Läuft auf allen VK-A
 **Nutzung:**
 1. **Bei VK angemeldet sein** (Session-Cookie erforderlich — das Userscript nutzt den normalen eingeloggten Zustand, **kein** separates Token nötig).
 2. Audio-Seite öffnen, z. B. `https://vk.ru/audio?performer=1&q=Chris%20Lake%2C%20ATRIP`.
-3. Bei jeder Track-Zeile erscheint rechts ein **⬇-Button**.
+3. Bei jeder Track-Zeile erscheint rechts ein **⬇-Button**: beim Hover am rechten Ende der Icon-Leiste (hinter •••), in ruhigen Zeilen unter der Dauerangabe.
 4. **Klick auf ⬇** lädt den Track: Der Tooltip zeigt den Fortschritt, die MP3-Datei wird in den Standard-Download-Ordner gespeichert (`Künstler - Titel.mp3`).
 5. Mehrere Tracks nacheinander herunterladen — jeder Klick startet einen eigenen Download.
 
@@ -64,13 +64,13 @@ Kompatibel mit **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Läuft auf allen VK-A
 
 ## Русский 🇷🇺
 
-Tampermonkey-юзерскрипт, который добавляет **кнопку загрузки для каждого трека** на страницах VK Audio (vk.com / vk.ru). Он полностью загружает HLS-поток, расшифровывает его и сохраняет **настоящий файл MP3** (`Исполнитель - Название.mp3`) локально.
+Tampermonkey-юзерскрипт, который добавляет **кнопку загрузки для каждого трека** на страницах VK Audio (vk.com / vk.ru). Он полностью загружает поток — HLS-плейлист с AES-128 или напрямую отдаваемый файл MP3 (VK, с 10/2026) —, при необходимости расшифровывает/демультиплексирует его и сохраняет **настоящий файл MP3** (`Исполнитель - Название.mp3`) локально.
 
 Совместим с **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Работает на всех разделах VK Audio: поиск, свои аудиозаписи, плейлисты, рекомендации.
 
 **Возможности:**
-- **Кнопка загрузки** (⬇) для каждого трека в строках `[data-testid="MusicTrackRow"]`
-- Полный конвейер: плейлист m3u8 → сегменты (расшифровка AES-128) → конкатенация → TS-демультиплексирование → **настоящий MP3** (без переименования контейнера)
+- **Кнопка загрузки** (⬇) для каждого трека в строках `[data-testid="MusicTrackRow"]` — при наведении в правом конце панели иконок (за •••), в спокойных строках под длительностью
+- Полный конвейер: плейлист m3u8 → сегменты (расшифровка AES-128) → конкатенация → TS-демультиплексирование → **настоящий MP3** (без переименования контейнера); прямые MP3-URL сохраняются без сегментного конвейера
 - Правильные имена файлов: `Исполнитель - Название.mp3` (спецсимволы очищаются)
 - Индикатор прогресса в подсказке (`Segment 3/11`, `сохранение…`, `сохранено`)
 - Работает в поиске, своих аудиозаписях, плейлистах, рекомендациях (устойчиво к SPA-навигации)
@@ -87,7 +87,7 @@ Tampermonkey-юзерскрипт, который добавляет **кноп�
 **Использование:**
 1. **Войдите в VK** (требуется сессионный cookie — юзерскрипт использует обычный авторизованный режим, **отдельный токен не нужен**).
 2. Откройте страницу аудио, например `https://vk.ru/audio?performer=1&q=Chris%20Lake%2C%20ATRIP`.
-3. В каждой строке трека справа появится **кнопка ⬇**.
+3. В каждой строке трека справа появится **кнопка ⬇**: при наведении в правом конце панели иконок (за •••), в спокойных строках под длительностью.
 4. **Нажмите ⬇**, чтобы скачать трек: подсказка показывает прогресс, файл MP3 сохраняется в стандартную папку загрузок (`Исполнитель - Название.mp3`).
 5. Скачивайте несколько треков подряд — каждый клик запускает отдельную загрузку.
 
