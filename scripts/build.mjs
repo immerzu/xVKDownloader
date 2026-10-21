@@ -12,7 +12,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HEADER = `// ==UserScript==
 // @name         xVKDownloader
 // @namespace    local.xvkdownloader
-// @version      1.0.17
+// @version      1.0.18
 // @description  Download-Button pro Track auf VK Audio-Seiten (vk.com/vk.ru); lädt den HLS-Stream und speichert MP3 lokal. Tampermonkey-kompatibel.
 // @description:en  Download button for each track on VK Audio pages (vk.com/vk.ru); loads the HLS stream and saves MP3 locally. Tampermonkey-compatible.
 // @description:ru  Кнопка загрузки для каждого трека на страницах VK Audio (vk.com/vk.ru); загружает HLS-поток и сохраняет MP3 локально. Совместимо с Tampermonkey.
@@ -83,4 +83,5 @@ for (const g of ['GM_xmlhttpRequest', 'GM_download', 'GM_setValue', 'GM_getValue
 if (issues.length) { console.error('BUILD-FEHLER:', issues.join(', ')); process.exit(1); }
 
 console.log('dist/xvkdownloader.user.js geschrieben: ' + (out.length / 1024).toFixed(1) + ' KB');
+
 

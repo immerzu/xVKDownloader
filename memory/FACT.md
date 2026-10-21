@@ -1,4 +1,4 @@
-# xVKDownloader — FACT SHEET (Stand: v1.0.17, 2026-10-21)
+# xVKDownloader — FACT SHEET (Stand: v1.0.18, 2026-10-21)
 
 Dauerhaftes Projektwissen zum xVKDownloader-Userscript (VK Audio → echtes MP3, Tampermonkey).
 Bei jeder Änderung die Stand-Zeile oben + JOURNAL.jsonl aktualisieren. Kurz-Regeln (bindend):
@@ -51,6 +51,16 @@ Bei jeder Änderung die Stand-Zeile oben + JOURNAL.jsonl aktualisieren. Kurz-Reg
   Belegt im Testprofil: ohne Hover Button 790–818 px, Dauer 830–857 px; mit Hover Button 641–669 px,
   Actions 669–861 px. Gäste-Fall: Grid hat feste Spalten (`52px 101px 199px 43px`) — ohne
   `justify-self:end` landet der Button in der breiten Titel-Spalte (verworfen).
+- **v1.0.18** (2026-10-21) – **Korrektur von 1.0.17**: Beim Nutzer lag der Button beim Hover **auf dem
+  „Snippet öffnen"-Icon** — VK legt die Grid-Zellen der Zeile dynamisch an, `justify-self:end` traf die
+  falsche Spalte. Neu: `findMount` = **Actions-Zelle, ans Ende** (`vkd-btn` nach dem Icon-Wrapper,
+  also hinter •••) wenn vorhanden, sonst **Dauer-Zelle** (unter der Zeitangabe). Damit ist die
+  Position unabhängig von der Grid-Berechnung. Dazu `pointerenter`/`pointerleave`-Hook mit Rescans
+  bei 60/250/600 ms — ohne ihn blieb der Button beim Hover bis zu 1,5 s unsichtbar (Dauer-Wrapper
+  wird ausgeblendet). Belegt: ohne Hover Button 647–675 / Dauer 645–675, mit Hover Button 651–679 =
+  rechtes Ende `audiorow-actions`; Klick lädt weiter (7 038 475 B MP3). Achtung: eine
+  **Neuinstallation** in Tampermonkey setzt die gemerkten `@connect`-Erlaubnisse zurück → einmalige
+  „fremde Ressource"-Abfrage für `cs1-*.vkuseraudio.ru` (normales Update behält sie).
 
 ## WICHTIGE Erkenntnisse (Session 2026-09-06)
 
@@ -126,4 +136,5 @@ Segment-Parallelität fest 3 (`settings.js`, nicht im Dialog änderbar).
 - VK kann Schutz jederzeit ändern (Stand Aug 2026 verifiziert); AAC-Streams → `.m4a/.aac`
   (echtes MP3 nur mit experimenteller ffmpeg.wasm-Transkodierung); nur Inhalte mit
   Download-Berechtigung (rechtlicher Hinweis).
+
 

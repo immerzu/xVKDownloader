@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         xVKDownloader
 // @namespace    local.xvkdownloader
-// @version      1.0.17
+// @version      1.0.18
 // @description  Download-Button pro Track auf VK Audio-Seiten (vk.com/vk.ru); lädt den HLS-Stream und speichert MP3 lokal. Tampermonkey-kompatibel.
 // @description:en  Download button for each track on VK Audio pages (vk.com/vk.ru); loads the HLS stream and saves MP3 locally. Tampermonkey-compatible.
 // @description:ru  Кнопка загрузки для каждого трека на страницах VK Audio (vk.com/vk.ru); загружает HLS-поток и сохраняет MP3 локально. Совместимо с Tampermonkey.
@@ -916,7 +916,6 @@
     'flex-shrink:0!important;color:#00c853!important;' +
     'transition:background .15s,color .15s!important;text-decoration:none!important;margin-left:2px!important;' +
     'position:relative!important;z-index:1000!important;vertical-align:middle!important;' +
-    'justify-self:end!important;align-self:center!important;' +
     'background:transparent!important;pointer-events:auto!important;border:none!important;padding:0!important;}' +
     '.vkd-btn.vkd-err{color:#e53935!important;}' +
     '.vkd-btn.vkd-err:hover{background:rgba(229,57,53,.12)!important;color:#e53935!important;}' +
@@ -1022,21 +1021,17 @@
   }
 
   /**
-   * Platzierung: rechts in der Zeile, direkt VOR der Actions-Zelle (immer sichtbar,
-   * schiebt die Hover-Icons nicht auseinander) — sonst Dauer-Zelle, sonst Row.
+   * Platzierung: in der Icon-Leiste der Zeile ganz rechts (nach dem •••-Menü) —
+   * die Leiste erscheint beim Hover und wird dynamisch befüllt. Ohne Hover (Gäste,
+   * ruhende Zeilen) sitzt der Button in der Dauer-Zelle, die es immer gibt.
    * Einzel-Audio-Seite: Actions-Zelle des Track-Blocks.
    * @returns {{mount:Element, before:Element|null}}
    */
   function findMount(row) {
-    /* Rechts in der Zellenzeile, direkt vor der Dauer (CSS: justify-self:end).
-       Die Actions-Zelle taucht erst beim Hover auf und liegt noch weiter rechts. */
+    var actions = row.querySelector('[data-testid="audiorow-actions"]');
+    if (actions) return { mount: actions, before: null };
     var dur = row.querySelector('[data-testid$="_Duration"], [data-testid*="Duration"]');
-    var info = row.querySelector('[data-testid="MusicTrackRow_Info"]') || row.querySelector('[data-testid$="_Info"]');
-    if (dur && dur.parentElement && info) {
-      var cell = dur.parentElement;
-      while (cell && cell !== row && !cell.contains(info)) cell = cell.parentElement;
-      if (cell && cell !== row) return { mount: cell, before: null };
-    }
+    if (dur && dur.parentElement) return { mount: dur.parentElement, before: null };
     /* Einzel-Audio-Seite (/audio<owner>_<id>_<access>): Actions-Zelle des Track-Blocks */
     var actionsGroup = row.querySelector('[data-testid="MusicAudio_ActionsGroup"]');
     if (actionsGroup) return { mount: actionsGroup, before: null };
@@ -1075,6 +1070,18 @@
     else target.mount.appendChild(btn);
     row.__vkdBtn = btn;
     row.__vkdTip = tip;
+
+    /* VK blendet die Icon-Leiste erst beim Hover ein (dynamische Zellen). Ohne
+       diesen Anstoß bliebe der Button bis zum nächsten Interval-Scan (1,5 s) am
+       alten Platz bzw. unsichtbar. */
+    if (!row.__vkdHoverHook) {
+      row.__vkdHoverHook = true;
+      var rescan = function () {
+        [60, 250, 600].forEach(function (t) { setTimeout(function () { scanNodes(row); }, t); });
+      };
+      row.addEventListener('pointerenter', rescan);
+      row.addEventListener('pointerleave', function () { setTimeout(function () { scanNodes(row); }, 250); });
+    }
   }
 
   /* ---------- Track-Extraktion ---------- */
