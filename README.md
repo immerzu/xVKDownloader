@@ -4,7 +4,7 @@
 
 Tampermonkey userscript that adds a **download button per track** on VK Audio pages (vk.com / vk.ru). It downloads the complete stream — HLS playlist with AES-128, or a directly served MP3 file (VK, since 10/2026) — decrypts/demuxes it if needed and saves a **real MP3 file** (`Artist - Title.mp3`) locally.
 
-Compatible with **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Works on all VK Audio surfaces: search, your own audios, playlists and recommendations.
+Compatible with **Tampermonkey 5.5.1** (Chrome/Edge/Brave). Works on all VK Audio surfaces: search, your own audios, playlists and recommendations.
 
 **Features:**
 - Download button (⬇) per track in `[data-testid="MusicTrackRow"]` rows — on hover at the right end of the icon bar (behind •••), in idle rows below the duration
@@ -16,7 +16,7 @@ Compatible with **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Works on all VK Audi
 - No data to third parties: login/token stay local in the browser (GM storage)
 
 **Installation:**
-1. Install **Tampermonkey** (if not already): https://www.tampermonkey.net/index.php?ext=dhdg&version=5.5.0
+1. Install **Tampermonkey** (if not already): https://www.tampermonkey.net/index.php?ext=dhdg&version=5.5.1
 2. Tampermonkey menu → **Dashboard** → **`+` (New script)**
 3. Open the script editor and paste the **entire content of `dist/xvkdownloader.user.js`**, then save (**File → Save**, Ctrl+S).
    - Alternative: open the `.user.js` file directly in the browser — Tampermonkey offers to install it.
@@ -35,7 +35,7 @@ Compatible with **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Works on all VK Audi
 
 Tampermonkey-Userscript, das auf VK-Audio-Seiten (vk.com / vk.ru) einen **Download-Button pro Track** einfügt, den Stream vollständig herunterlädt — HLS-Playlist mit AES-128 oder direkt gelieferte MP3-Datei (VK, seit 10/2026) —, ihn bei Bedarf entschlüsselt/demuxt und als **echte MP3-Datei** (`Künstler - Titel.mp3`) lokal speichert.
 
-Kompatibel mit **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Läuft auf allen VK-Audio-Oberflächen: Suche, eigene Audios, Playlists, Empfehlungen.
+Kompatibel mit **Tampermonkey 5.5.1** (Chrome/Edge/Brave). Läuft auf allen VK-Audio-Oberflächen: Suche, eigene Audios, Playlists, Empfehlungen.
 
 **Funktionen:**
 - **Download-Button** (⬇) pro Track in `[data-testid="MusicTrackRow"]`-Zeilen — beim Hover am rechten Ende der Icon-Leiste (hinter •••), in ruhigen Zeilen unter der Dauerangabe
@@ -47,7 +47,7 @@ Kompatibel mit **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Läuft auf allen VK-A
 - Keine Daten an Dritte: Login/Token bleiben lokal im Browser (GM-Storage)
 
 **Installation:**
-1. **Tampermonkey** installieren (falls noch nicht vorhanden): https://www.tampermonkey.net/index.php?ext=dhdg&version=5.5.0
+1. **Tampermonkey** installieren (falls noch nicht vorhanden): https://www.tampermonkey.net/index.php?ext=dhdg&version=5.5.1
 2. Tampermonkey-Menü → **Dashboard** → **`+` (Neues Skript)**
 3. Skript-Editor öffnen, **gesamten Inhalt von `dist/xvkdownloader.user.js`** einfügen, mit **Datei → Speichern** (Strg+S) sichern.
    - Alternativ: Die `.user.js`-Datei direkt im Browser öffnen — Tampermonkey bietet die Installation an.
@@ -66,7 +66,7 @@ Kompatibel mit **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Läuft auf allen VK-A
 
 Tampermonkey-юзерскрипт, который добавляет **кнопку загрузки для каждого трека** на страницах VK Audio (vk.com / vk.ru). Он полностью загружает поток — HLS-плейлист с AES-128 или напрямую отдаваемый файл MP3 (VK, с 10/2026) —, при необходимости расшифровывает/демультиплексирует его и сохраняет **настоящий файл MP3** (`Исполнитель - Название.mp3`) локально.
 
-Совместим с **Tampermonkey 5.5.0** (Chrome/Edge/Brave). Работает на всех разделах VK Audio: поиск, свои аудиозаписи, плейлисты, рекомендации.
+Совместим с **Tampermonkey 5.5.1** (Chrome/Edge/Brave). Работает на всех разделах VK Audio: поиск, свои аудиозаписи, плейлисты, рекомендации.
 
 **Возможности:**
 - **Кнопка загрузки** (⬇) для каждого трека в строках `[data-testid="MusicTrackRow"]` — при наведении в правом конце панели иконок (за •••), в спокойных строках под длительностью
@@ -78,7 +78,7 @@ Tampermonkey-юзерскрипт, который добавляет **кноп�
 - Данные не передаются третьим лицам: логин/токен остаются локально в браузере (GM-хранилище)
 
 **Установка:**
-1. Установите **Tampermonkey** (если ещё нет): https://www.tampermonkey.net/index.php?ext=dhdg&version=5.5.0
+1. Установите **Tampermonkey** (если ещё нет): https://www.tampermonkey.net/index.php?ext=dhdg&version=5.5.1
 2. Меню Tampermonkey → **Dashboard** → **`+` (Новый скрипт)**
 3. Откройте редактор скриптов и вставьте **всё содержимое `dist/xvkdownloader.user.js`**, сохраните (**Файл → Сохранить**, Ctrl+S).
    - Альтернатива: откройте файл `.user.js` прямо в браузере — Tampermonkey предложит установку.
@@ -193,6 +193,8 @@ xVKDownloader/
 │   ├── netlog-analyze.mjs         ← NetLog-Analyse: Audio-Requests (Status/Fehler)
 │   ├── netlog-stream.mjs          ← NetLog-Detail: m3u8-/Stream-Events
 │   └── netlog-timeline.mjs        ← NetLog-Timeline: Stream-Events mit Zeiten
+├── memory/                        ← Projektgedächtnis (FACT.md, JOURNAL.jsonl; siehe AGENTS.md)
+├── AGENTS.md                      ← Projektregeln (Release-Workflow, GF-Beschreibungs-Konvention)
 ├── description.md                 ← Kurzbeschreibung für Greasy Fork (DE → RU → EN)
 └── Ausgabe/                       ← lokales Release-Archiv (gitignored; versionierte .user.js, bis v1.0.18)
 ```
@@ -247,7 +249,7 @@ mit dem Quell-MP3) und Dateinamen.
 ## Bekannte Einschränkungen & Risiken
 
 - **VK kann den Schutz jederzeit ändern** (Obfuskation, Verschlüsselung, DOM).
-  Der Decoder und die Endpunkte sind Stand August 2026 live verifiziert.
+  Der Decoder und die Endpunkte sind Stand Oktober 2026 live verifiziert (seit 10/2026 liefert die Track-Liste direkte MP3-Dateien; der `reload_audios`-Pfad liefert weiterhin HLS).
 - Falls VK Streams mit **AAC** statt MP3 ausliefert, speichert das Script den
   nativen Container (`.m4a`/`.aac`); für echtes MP3 dann die experimentelle
   ffmpeg.wasm-Transkodierung aktivieren (`scripts/fetch-ffmpeg-wasm.mjs`).

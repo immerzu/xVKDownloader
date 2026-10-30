@@ -1,4 +1,4 @@
-# xVKDownloader — FACT SHEET (Stand: v1.0.18, 2026-10-21)
+# xVKDownloader — FACT SHEET (Stand: v1.0.18, 2026-10-30)
 
 Dauerhaftes Projektwissen zum xVKDownloader-Userscript (VK Audio → echtes MP3, Tampermonkey).
 Bei jeder Änderung die Stand-Zeile oben + JOURNAL.jsonl aktualisieren. Kurz-Regeln (bindend):
@@ -139,5 +139,14 @@ Segment-Parallelität fest 3 (`settings.js`, nicht im Dialog änderbar).
   (echtes MP3 nur mit experimenteller ffmpeg.wasm-Transkodierung); nur Inhalte mit
   Download-Berechtigung (rechtlicher Hinweis).
 
-
-
+## Projektpflege 2026-10-30 (Bereinigung)
+- Leeres Testverzeichnis `out/` entfernt (war gitignored; `.gitignore`-Eintrag bleibt als Schutz).
+- README: Tampermonkey-Angabe 5.5.0 → **5.5.1** (6 Stellen: 3× Text, 3× Download-Link; Extension im
+  Testprofil ist 5.5.1, Link liefert HTTP 200), Verifikationsstand „August 2026" → **Oktober 2026**
+  (MP3-Umstellung), Strukturliste um `memory/` und `AGENTS.md` ergänzt.
+- `description.md` und `@description`/GitHub-Repo-Beschreibung **bewusst unverändert**: „lädt den
+  HLS-Stream" bleibt zutreffend (der `reload_audios`-Pfad liefert weiter HLS); eine Änderung der
+  Metablock-Beschreibung wäre eine Produktänderung mit Versionspflicht.
+- Prüfungen: `node scripts/build.mjs` reproduziert `dist/xvkdownloader.user.js` byte-identisch
+  (SHA256 vor/nach gleich), `node test/run-tests.mjs` → 24/24 grün.
+- Offen (bewusst): UUID-Dateinamen bei Blob-Downloads (Tampermonkey 5.5.1, siehe Erkenntnis 6).
